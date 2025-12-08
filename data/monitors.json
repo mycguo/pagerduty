@@ -16,6 +16,9 @@
     ],
     "enabled": true,
     "schedule": "*/5 * * * *",
+    "alert_emails": [],
+    "slack_webhook_url": null,
+    "alerts_enabled": true,
     "created_at": "2025-12-08T12:58:26.723016",
     "updated_at": "2025-12-08T12:58:26.723021"
   },
@@ -55,6 +58,9 @@
     ],
     "enabled": true,
     "schedule": "*/5 * * * *",
+    "alert_emails": [],
+    "slack_webhook_url": null,
+    "alerts_enabled": true,
     "created_at": "2025-12-08T12:59:50.334448",
     "updated_at": "2025-12-08T12:59:50.334452"
   },
@@ -75,6 +81,9 @@
     ],
     "enabled": true,
     "schedule": "*/5 * * * *",
+    "alert_emails": [],
+    "slack_webhook_url": null,
+    "alerts_enabled": true,
     "created_at": "2025-12-08T12:59:50.334458",
     "updated_at": "2025-12-08T12:59:50.334459"
   },
@@ -96,6 +105,9 @@
     ],
     "enabled": true,
     "schedule": "*/5 * * * *",
+    "alert_emails": [],
+    "slack_webhook_url": null,
+    "alerts_enabled": true,
     "created_at": "2025-12-08T12:59:50.334463",
     "updated_at": "2025-12-08T12:59:50.334463"
   }
