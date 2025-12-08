@@ -1,0 +1,102 @@
+[
+  {
+    "id": "9adb58a5-0f53-4e31-8e1e-807498d86062",
+    "name": "Test Example.com",
+    "url": "https://example.com",
+    "steps": [
+      {
+        "type": "navigate",
+        "url": "https://example.com"
+      },
+      {
+        "type": "verify",
+        "condition": "element_exists",
+        "selector": "h1"
+      }
+    ],
+    "enabled": true,
+    "schedule": "*/5 * * * *",
+    "created_at": "2025-12-08T12:58:26.723016",
+    "updated_at": "2025-12-08T12:58:26.723021"
+  },
+  {
+    "id": "1b90b4a8-a53b-4902-80ca-154429f17806",
+    "name": "Wikipedia Health Check",
+    "url": "https://www.wikipedia.org",
+    "steps": [
+      {
+        "type": "navigate",
+        "url": "https://www.wikipedia.org"
+      },
+      {
+        "type": "verify",
+        "condition": "element_exists",
+        "selector": "#searchInput"
+      },
+      {
+        "type": "fill",
+        "selector": "#searchInput",
+        "value": "Python programming"
+      },
+      {
+        "type": "click",
+        "selector": "button[type='submit']"
+      },
+      {
+        "type": "wait",
+        "wait_type": "time",
+        "duration": 2000
+      },
+      {
+        "type": "verify",
+        "condition": "url_contains",
+        "expected": "wikipedia.org"
+      }
+    ],
+    "enabled": true,
+    "schedule": "*/5 * * * *",
+    "created_at": "2025-12-08T12:59:50.334448",
+    "updated_at": "2025-12-08T12:59:50.334452"
+  },
+  {
+    "id": "0bc1cac1-e071-4b8b-a179-5e3f22a21c62",
+    "name": "GitHub Homepage Check",
+    "url": "https://github.com",
+    "steps": [
+      {
+        "type": "navigate",
+        "url": "https://github.com"
+      },
+      {
+        "type": "verify",
+        "condition": "element_visible",
+        "selector": "a[href='/login']"
+      }
+    ],
+    "enabled": true,
+    "schedule": "*/5 * * * *",
+    "created_at": "2025-12-08T12:59:50.334458",
+    "updated_at": "2025-12-08T12:59:50.334459"
+  },
+  {
+    "id": "83ac60d7-dd1a-497d-9347-1203a11184fe",
+    "name": "Example.com Basic Test",
+    "url": "https://example.com",
+    "steps": [
+      {
+        "type": "navigate",
+        "url": "https://example.com"
+      },
+      {
+        "type": "verify",
+        "condition": "text_contains",
+        "selector": "h1",
+        "expected": "Example Domain"
+      }
+    ],
+    "enabled": true,
+    "schedule": "*/5 * * * *",
+    "created_at": "2025-12-08T12:59:50.334463",
+    "updated_at": "2025-12-08T12:59:50.334463"
+  }
+]
