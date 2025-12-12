@@ -48,52 +48,99 @@ class MonitorRecorder:
 
     def _record_action(self, action_type: str, details: Dict[str, Any]):
         """Callback for recorded actions from the browser."""
+        new_step = None
+
         if action_type == 'click':
-            step = {
+            new_step = {
                 "type": "click",
                 "selector": details['selector']
             }
-            # Avoid duplicate clicks if they happen too fast, or just log it
-            self.steps.append(step)
             print(f"Recorded click: {details['selector']}")
 
         elif action_type == 'input':
-            step = {
+            new_step = {
                 "type": "fill",
                 "selector": details['selector'],
                 "value": details['value']
             }
-            # Strategy: update the last step if it was a fill for the same selector
-            # to avoid creating a step for every keystroke if 'input' fires often
-            # Ideally we listen to 'change' or use a debounce in JS. 
-            # Here we'll handle 'change' events mostly, or 'focusout'.
-            # Let's say we rely on the JS sending 'change' events.
-            self.steps.append(step)
             print(f"Recorded fill: {details['selector']} = {details['value']}")
+
+        # Deduplication logic
+        if new_step:
+            if self.steps:
+                last_step = self.steps[-1]
+                # If same type and selector
+                if last_step.get('type') == new_step['type'] and \
+                   last_step.get('selector') == new_step['selector']:
+                    
+                    # For input, we just update the value of the last step (capture final text)
+                    if new_step['type'] == 'fill':
+                        last_step['value'] = new_step['value']
+                        print(f"Updated previous fill step value to: {new_step['value']}")
+                        return
+                    
+                    # For click, strict duplication check (ignore rapid double clicks usually)
+                    # But checking timestamps might be better. For now, strict identity is safer to avoid spam.
+                    print("Duplicate step detected, ignoring.")
+                    return
+
+            self.steps.append(new_step)
 
     def _inject_recorder(self, page: Page):
         """Inject JavaScript to capture user interactions."""
-        # Simple selector generator logic + event listeners
+        # Improved selector generator logic + event listeners
         js_script = """
             function getSelector(el) {
-                if (el.id) return '#' + el.id;
+                // 1. ID
+                if (el.id) return '#' + CSS.escape(el.id);
+                
+                // 2. Test Attributes
                 if (el.getAttribute('data-testid')) return `[data-testid="${el.getAttribute('data-testid')}"]`;
+                if (el.getAttribute('data-test')) return `[data-test="${el.getAttribute('data-test')}"]`;
+
+                // 3. Text Content (for buttons, links, labels) - Powerful & Human Readable
+                const tag = el.tagName.toLowerCase();
+                if (['button', 'a', 'label', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'div'].includes(tag)) {
+                    // Get direct text content, trimmed
+                    const text = el.innerText ? el.innerText.trim() : '';
+                    if (text && text.length < 50 && text.length > 0) {
+                        // Check if text is unique-ish (heuristc) or just use it.
+                        // Playwright 'text=' engine is robust.
+                        // We need to escape quotes in text.
+                        const safeText = text.replace(/"/g, '\\\\"');
+                        
+                        // For links and buttons, just text is usually great
+                        if (['button', 'a'].includes(tag)) {
+                            return `text="${safeText}"`;
+                        }
+                        
+                        // For others, maybe ensure tag specificity
+                        // return `${tag}:has-text("${safeText}")`; // Standard CSS way-ish in Playwright
+                        return `text="${safeText}"`;
+                    }
+                }
+                
+                // 4. Form Attributes
                 if (el.getAttribute('name')) return `[name="${el.getAttribute('name')}"]`;
                 if (el.getAttribute('placeholder')) return `[placeholder="${el.getAttribute('placeholder')}"]`;
                 if (el.getAttribute('aria-label')) return `[aria-label="${el.getAttribute('aria-label')}"]`;
                 
-                // For buttons, try to find a submit type
-                if (el.tagName.toLowerCase() === 'button' && el.type) {
+                // 5. Button type
+                if (tag === 'button' && el.type) {
                     return `button[type="${el.type}"]`;
                 }
 
+                // 6. Classes (Fallback, improved escaping)
                 if (el.className && typeof el.className === 'string') {
-                    const classes = el.className.split(' ').filter(c => c).map(c => CSS.escape(c)).join('.');
+                    const classes = el.className.split(' ')
+                        .filter(c => c)
+                        .map(c => CSS.escape(c))
+                        .join('.');
                     if (classes) return '.' + classes;
                 }
                 
-                // Fallback to tag name
-                return el.tagName.toLowerCase();
+                // 7. Fallback to tag name
+                return tag;
             }
 
             document.addEventListener('click', (e) => {

@@ -5,26 +5,22 @@
   },
   {
     "type": "click",
-    "selector": "button[type=\"submit\"]"
+    "selector": "text=\"All Apps\""
   },
   {
     "type": "click",
-    "selector": ".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\:bg-gray-50.hover\\:text-gray-900"
+    "selector": "text=\"Right Fit Matcher\""
   },
   {
     "type": "click",
-    "selector": ".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\:bg-gray-50.hover\\:text-gray-900"
+    "selector": "text=\"Application Planner\""
   },
   {
     "type": "click",
-    "selector": ".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\:bg-gray-50.hover\\:text-gray-900"
+    "selector": "text=\"AI Essay Editor\""
   },
   {
     "type": "click",
-    "selector": ".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\:bg-gray-50.hover\\:text-gray-900"
-  },
-  {
-    "type": "click",
-    "selector": ".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\:bg-gray-50.hover\\:text-gray-900"
+    "selector": "text=\"Scholarship Matcher\""
   }
 ]

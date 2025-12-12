@@ -368,5 +368,77 @@
         "error_message": "Page.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator(\".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\\\:bg-gray-50.hover\\\\:text-gray-900\")\n    - locator resolved to 5 elements. Proceeding with the first one: <a href=\"/right-fit-matcher?email=mycguo%40gmail.com\" class=\"w-full flex items-center justify-between text-left px-3 py-2 text-sm rounded-md transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900\">\u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n  - retrying click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <button aria-expanded=\"false\" aria-controls=\"submenu-apps\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</button> intercepts pointer events\n  - retrying click action\n    - waiting 20ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n  2 \u00d7 retrying click action\n      - waiting 100ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <a href=\"/dashboard/academic-profile?email=mycguo%40gmail.com\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</a> from <div class=\"relative group\">\u2026</div> subtree intercepts pointer events\n  4 \u00d7 retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <button aria-expanded=\"false\" aria-controls=\"submenu-apps\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</button> intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <a href=\"/dashboard/academic-profile?email=mycguo%40gmail.com\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</a> from <div class=\"relative group\">\u2026</div> subtree intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <a href=\"/dashboard/academic-profile?email=mycguo%40gmail.com\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</a> from <div class=\"relative group\">\u2026</div> subtree intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <button aria-expanded=\"false\" aria-controls=\"submenu-apps\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</button> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n"
       }
     ]
+  },
+  {
+    "id": "73c99d11-b33a-4beb-b3d8-812eabd85bef",
+    "monitor_id": "0a807805-100e-4cdd-b5eb-5bdf351cd3aa",
+    "status": "success",
+    "started_at": "2025-12-12T00:37:13.289401",
+    "completed_at": "2025-12-12T00:37:17.964852",
+    "duration_ms": 4675,
+    "error_message": null,
+    "screenshot_path": null,
+    "step_results": [
+      {
+        "step_index": 0,
+        "step": {
+          "type": "navigate",
+          "url": "https://dashboard.findmyorbit.com/dashboard?email=mycguo%40gmail.com"
+        },
+        "status": "success",
+        "duration_ms": 3652,
+        "error_message": null
+      },
+      {
+        "step_index": 1,
+        "step": {
+          "type": "click",
+          "selector": "text=\"All Apps\""
+        },
+        "status": "success",
+        "duration_ms": 95,
+        "error_message": null
+      },
+      {
+        "step_index": 2,
+        "step": {
+          "type": "click",
+          "selector": "text=\"Right Fit Matcher\""
+        },
+        "status": "success",
+        "duration_ms": 246,
+        "error_message": null
+      },
+      {
+        "step_index": 3,
+        "step": {
+          "type": "click",
+          "selector": "text=\"Application Planner\""
+        },
+        "status": "success",
+        "duration_ms": 164,
+        "error_message": null
+      },
+      {
+        "step_index": 4,
+        "step": {
+          "type": "click",
+          "selector": "text=\"AI Essay Editor\""
+        },
+        "status": "success",
+        "duration_ms": 32,
+        "error_message": null
+      },
+      {
+        "step_index": 5,
+        "step": {
+          "type": "click",
+          "selector": "text=\"Scholarship Matcher\""
+        },
+        "status": "success",
+        "duration_ms": 34,
+        "error_message": null
+      }
+    ]
   }
 ]
