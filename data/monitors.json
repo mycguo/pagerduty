@@ -14,13 +14,13 @@
         "selector": "h1"
       }
     ],
-    "enabled": true,
+    "enabled": false,
     "schedule": "*/5 * * * *",
     "alert_emails": [],
     "slack_webhook_url": null,
     "alerts_enabled": true,
     "created_at": "2025-12-08T12:58:26.723016",
-    "updated_at": "2025-12-08T12:58:26.723021"
+    "updated_at": "2025-12-12T01:04:20.523152"
   },
   {
     "id": "1b90b4a8-a53b-4902-80ca-154429f17806",
@@ -80,31 +80,31 @@
         "expected": "Example Domain"
       }
     ],
-    "enabled": true,
+    "enabled": false,
     "schedule": "*/5 * * * *",
     "alert_emails": [],
     "slack_webhook_url": null,
     "alerts_enabled": true,
     "created_at": "2025-12-08T12:59:50.334463",
-    "updated_at": "2025-12-08T12:59:50.334463"
+    "updated_at": "2025-12-12T01:04:30.810476"
   },
   {
     "id": "21e2c5e0-fe25-4c47-8c0b-cd132b9349be",
-    "name": "dashboard",
-    "url": "https://dashboard.findmyorbit.com/dashboard?email=mycguo%40gmail.com",
+    "name": "finddummy fail",
+    "url": "https://dashboard.finddummy.com",
     "steps": [
       {
         "type": "navigate",
-        "url": "https://dashboard.findmyorbit.com/dashboard?email=mycguo%40gmail.com"
+        "url": "https://dashboard.finddummy/dashboard"
       }
     ],
-    "enabled": true,
+    "enabled": false,
     "schedule": "*/5 * * * *",
     "alert_emails": [],
-    "slack_webhook_url": null,
+    "slack_webhook_url": "https://hooks.slack.com/services/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",
     "alerts_enabled": true,
     "created_at": "2025-12-11T23:38:51.163749",
-    "updated_at": "2025-12-11T23:38:51.163752"
+    "updated_at": "2025-12-12T01:03:57.065299"
   },
   {
     "id": "9ea81ccb-a44b-4cb0-be58-77df0156721a",
@@ -116,22 +116,22 @@
         "url": "https://dashboard.findmyorbit.com/dashboard?email=mycguo%40gmail.com"
       }
     ],
-    "enabled": true,
+    "enabled": false,
     "schedule": "*/5 * * * *",
     "alert_emails": [],
     "slack_webhook_url": null,
     "alerts_enabled": true,
     "created_at": "2025-12-11T23:39:02.245988",
-    "updated_at": "2025-12-11T23:39:02.245992"
+    "updated_at": "2025-12-12T01:04:12.085921"
   },
   {
     "id": "0a807805-100e-4cdd-b5eb-5bdf351cd3aa",
-    "name": "findmyorbit dashboard",
-    "url": "https://dashboard.findmyorbit.com/dashboard?email=mycguo%40gmail.com",
+    "name": "finddummy dashboard",
+    "url": "https://dashboard.finddummy.com",
     "steps": [
       {
         "type": "navigate",
-        "url": "https://dashboard.findmyorbit.com/dashboard?email=mycguo%40gmail.com"
+        "url": "https://dashboard.finddummycom/dashboard"
       },
       {
         "type": "click",
@@ -157,9 +157,9 @@
     "enabled": true,
     "schedule": "*/5 * * * *",
     "alert_emails": [],
-    "slack_webhook_url": null,
+    "slack_webhook_url": "https://hooks.slack.com/services/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",
     "alerts_enabled": true,
     "created_at": "2025-12-12T00:04:13.015885",
-    "updated_at": "2025-12-12T00:37:10.306519"
+    "updated_at": "2025-12-12T01:01:27.865077"
   }
 ]

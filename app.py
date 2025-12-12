@@ -3,6 +3,7 @@ import streamlit as st
 from dotenv import load_dotenv
 
 from src.storage.storage import Storage
+from src.monitoring.scheduler import MonitorScheduler
 from src.ui.dashboard import render_dashboard
 from src.ui.monitors import render_monitors
 from src.ui.results import render_results
@@ -26,23 +27,26 @@ def get_storage():
 
 storage = get_storage()
 
-# Sidebar navigation
+# Initialize Scheduler
+@st.cache_resource
+def get_scheduler(_storage_instance):
+    return MonitorScheduler(_storage_instance)
+
+scheduler = get_scheduler(storage)
+# Sync jobs on every run to ensure updates are reflected
+scheduler.sync_jobs()
+
+# Sidebar
 st.sidebar.title("🔍 Web Monitor")
+st.sidebar.caption("Automated Browser Testing")
+
+# Scheduler Status
+st.sidebar.markdown("---")
+st.sidebar.markdown("**System Status**")
+st.sidebar.markdown(f"scheduler: {'🟢 Running' if scheduler.scheduler.running else '🔴 Stopped'}")
 st.sidebar.markdown("---")
 
-page = st.sidebar.radio(
-    "Navigation",
-    ["📊 Dashboard", "⚙️ Monitors", "📋 Test Results"],
-    label_visibility="collapsed"
-)
-
-st.sidebar.markdown("---")
-st.sidebar.markdown("### About")
-st.sidebar.info(
-    "**Web Monitoring App**\n\n"
-    "Monitor your web applications by automating login flows and verifying critical functionality.\n\n"
-    "Built with Streamlit and Playwright."
-)
+page = st.sidebar.radio("Navigation", ["📊 Dashboard", "⚙️ Monitors", "📝 Test Results"], label_visibility="collapsed")
 
 # Quick stats in sidebar
 monitors = storage.get_monitors()
@@ -63,5 +67,5 @@ if page == "📊 Dashboard":
     render_dashboard(storage)
 elif page == "⚙️ Monitors":
     render_monitors(storage)
-elif page == "📋 Test Results":
+elif page == "📝 Test Results":
     render_results(storage)
