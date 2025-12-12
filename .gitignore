@@ -37,7 +37,7 @@ screenshots/
 # Data
 *.db
 *.sqlite
-config/monitors.json
+data/
 
 # IDE
 .vscode/

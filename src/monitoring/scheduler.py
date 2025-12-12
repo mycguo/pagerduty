@@ -1,6 +1,7 @@
 import logging
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
+from apscheduler.executors.pool import ThreadPoolExecutor
 from apscheduler.events import EVENT_JOB_ERROR, EVENT_JOB_EXECUTED
 from src.monitoring.monitor import Monitor
 from src.monitoring.runner import MonitorRunner
@@ -13,7 +14,11 @@ class MonitorScheduler:
     
     def __init__(self, storage: Storage):
         self.storage = storage
-        self.scheduler = BackgroundScheduler()
+        # Configure executors to use threads instead of default (which can conflict with asyncio)
+        executors = {
+            'default': ThreadPoolExecutor(max_workers=3)
+        }
+        self.scheduler = BackgroundScheduler(executors=executors)
         self.scheduler.start()
         logger.info("MonitorScheduler started")
 
