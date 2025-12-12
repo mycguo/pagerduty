@@ -23,15 +23,15 @@ class MonitorRecorder:
             # Expose the recording function to the browser
             page.expose_function("record_action", self._record_action)
 
+            # Inject the recording script
+            self._inject_recorder(page)
+
             # Navigate to the initial URL
             self.steps.append({
                 "type": "navigate",
                 "url": url
             })
             page.goto(url)
-
-            # Inject the recording script
-            self._inject_recorder(page)
 
             # Keep the script running until the browser is closed
             try:
@@ -88,7 +88,7 @@ class MonitorRecorder:
                 }
 
                 if (el.className && typeof el.className === 'string') {
-                    const classes = el.className.split(' ').filter(c => c).join('.');
+                    const classes = el.className.split(' ').filter(c => c).map(c => CSS.escape(c)).join('.');
                     if (classes) return '.' + classes;
                 }
                 

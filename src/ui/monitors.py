@@ -10,23 +10,33 @@ from src.storage.storage import Storage
 
 def render_monitors(storage: Storage):
     """Render the monitors configuration page."""
-    st.title("⚙️ Monitor Configuration")
+    # Initialize session state for navigation
+    if 'monitor_view' not in st.session_state:
+        st.session_state.monitor_view = 'list'
+    if 'editing_monitor_id' not in st.session_state:
+        st.session_state.editing_monitor_id = None
 
-    tab1, tab2 = st.tabs(["📋 All Monitors", "➕ Add/Edit Monitor"])
-
-    with tab1:
+    if st.session_state.monitor_view == 'list':
         render_monitor_list(storage)
-
-    with tab2:
+    elif st.session_state.monitor_view in ['create', 'edit']:
         render_monitor_editor(storage)
 
 
 def render_monitor_list(storage: Storage):
     """Render the list of monitors."""
+    st.title("⚙️ Monitor Configuration")
+    
+    col1, col2 = st.columns([3, 1])
+    with col2:
+        if st.button("➕ Create New Monitor", use_container_width=True):
+            st.session_state.monitor_view = 'create'
+            st.session_state.editing_monitor_id = None
+            st.rerun()
+
     monitors = storage.get_monitors()
 
     if not monitors:
-        st.info("No monitors configured yet. Use the 'Add/Edit Monitor' tab to create one.")
+        st.info("No monitors configured yet. Click 'Create New Monitor' to add one.")
         return
 
     for monitor in monitors:
@@ -54,8 +64,16 @@ def render_monitor_list(storage: Storage):
                     st.write("**Alerts:** 🔕 Disabled")
 
             with col2:
+                # Action buttons
+                
+                # Edit button
+                if st.button("✏️ Edit", key=f"edit_{monitor.id}", use_container_width=True):
+                    st.session_state.monitor_view = 'edit'
+                    st.session_state.editing_monitor_id = monitor.id
+                    st.rerun()
+
                 # Run button
-                if st.button(f"▶️ Run", key=f"run_{monitor.id}"):
+                if st.button(f"▶️ Run", key=f"run_{monitor.id}", use_container_width=True):
                     with st.spinner(f"Running {monitor.name}..."):
                         runner = MonitorRunner(headless=True)
                         result = runner.run_monitor(monitor)
@@ -67,14 +85,15 @@ def render_monitor_list(storage: Storage):
                             st.error(f"❌ Test failed: {result.error_message}")
 
                 # Toggle enable/disable
-                if st.button(f"{'⏸️ Disable' if monitor.enabled else '▶️ Enable'}", key=f"toggle_{monitor.id}"):
+                btn_label = "⏸️ Disable" if monitor.enabled else "▶️ Enable"
+                if st.button(btn_label, key=f"toggle_{monitor.id}", use_container_width=True):
                     monitor.enabled = not monitor.enabled
                     monitor.updated_at = datetime.now()
                     storage.save_monitor(monitor)
                     st.rerun()
 
                 # Delete button
-                if st.button(f"🗑️ Delete", key=f"delete_{monitor.id}"):
+                if st.button(f"🗑️ Delete", key=f"delete_{monitor.id}", use_container_width=True):
                     storage.delete_monitor(monitor.id)
                     st.success(f"Deleted {monitor.name}")
                     st.rerun()
@@ -107,11 +126,46 @@ def render_monitor_list(storage: Storage):
 
 def render_monitor_editor(storage: Storage):
     """Render the monitor editor form."""
-    st.subheader("Create or Edit Monitor")
+    
+    if st.button("← Back to List"):
+        st.session_state.monitor_view = 'list'
+        st.session_state.editing_monitor_id = None
+        st.rerun()
+
+    is_editing = st.session_state.monitor_view == 'edit'
+    title = "Edit Monitor" if is_editing else "Create New Monitor"
+    st.subheader(title)
+
+    selected_monitor = None
+    if is_editing and st.session_state.editing_monitor_id:
+        selected_monitor = storage.get_monitor(st.session_state.editing_monitor_id)
+
+    key_suffix = selected_monitor.id if selected_monitor else "new"
+
+    # Defaults
+    default_name = ""
+    default_url = ""
+    default_steps = '[\n  {\n    "type": "navigate",\n    "url": "https://example.com"\n  }\n]'
+    default_schedule = "*/5 * * * *"
+    default_enabled = True
+    default_alerts_enabled = True
+    default_emails = ""
+    default_slack = ""
+
+    # Override defaults if editing
+    if selected_monitor:
+        default_name = selected_monitor.name
+        default_url = selected_monitor.url
+        default_steps = json.dumps(selected_monitor.steps, indent=2)
+        default_schedule = selected_monitor.schedule
+        default_enabled = selected_monitor.enabled
+        default_alerts_enabled = selected_monitor.alerts_enabled
+        default_emails = "\n".join(selected_monitor.alert_emails)
+        default_slack = selected_monitor.slack_webhook_url or ""
 
     # Basic information
-    monitor_name = st.text_input("Monitor Name", placeholder="Production Login Check")
-    monitor_url = st.text_input("Base URL", placeholder="https://app.example.com")
+    monitor_name = st.text_input("Monitor Name", value=default_name, placeholder="Production Login Check", key=f"monitor_name_{key_suffix}")
+    monitor_url = st.text_input("Base URL", value=default_url, placeholder="https://app.example.com", key=f"monitor_url_{key_suffix}")
 
     st.divider()
 
@@ -162,41 +216,46 @@ def render_monitor_editor(storage: Storage):
     # Step configuration
     steps_json = st.text_area(
         "Steps (JSON format)",
-        value='[\n  {\n    "type": "navigate",\n    "url": "https://example.com"\n  }\n]',
-        height=400
+        value=default_steps,
+        height=400,
+        key=f"monitor_steps_{key_suffix}"
     )
 
     # Advanced options
     with st.expander("⚙️ Advanced Options"):
-        schedule = st.text_input("Schedule (cron format)", value="*/5 * * * *",
-                                 help="Default: Every 5 minutes")
-        enabled = st.checkbox("Enable monitor", value=True)
+        schedule = st.text_input("Schedule (cron format)", value=default_schedule,
+                                 help="Default: Every 5 minutes", key=f"monitor_schedule_{key_suffix}")
+        enabled = st.checkbox("Enable monitor", value=default_enabled, key=f"monitor_enabled_{key_suffix}")
 
     # Alert configuration
     with st.expander("🔔 Alert Configuration"):
         st.markdown("Configure notifications for test failures.")
 
-        alerts_enabled = st.checkbox("Enable alerts", value=True,
-                                      help="Send notifications when tests fail")
+        alerts_enabled = st.checkbox("Enable alerts", value=default_alerts_enabled,
+                                      help="Send notifications when tests fail", key=f"monitor_alerts_enabled_{key_suffix}")
 
         st.markdown("**Email Alerts**")
         email_addresses = st.text_area(
             "Email addresses (one per line)",
+            value=default_emails,
             placeholder="admin@example.com\nteam@example.com",
             height=100,
-            help="Enter email addresses to notify on failures"
+            help="Enter email addresses to notify on failures",
+            key=f"monitor_emails_{key_suffix}"
         )
 
         st.markdown("**Slack Alerts**")
         slack_webhook = st.text_input(
             "Slack Webhook URL",
+            value=default_slack,
             placeholder="https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
-            help="Enter your Slack webhook URL to send notifications to a Slack channel"
+            help="Enter your Slack webhook URL to send notifications to a Slack channel",
+            key=f"monitor_slack_{key_suffix}"
         )
 
         if slack_webhook:
             from src.alerts.slack_alert import SlackAlert
-            if st.button("🧪 Test Slack Webhook"):
+            if st.button("🧪 Test Slack Webhook", key=f"test_slack_{key_suffix}"):
                 slack_alert = SlackAlert()
                 if slack_alert.send_test_message(slack_webhook):
                     st.success("✅ Test message sent to Slack!")
@@ -204,7 +263,7 @@ def render_monitor_editor(storage: Storage):
                     st.error("❌ Failed to send test message. Check your webhook URL.")
 
     # Save button
-    if st.button("💾 Save Monitor", type="primary"):
+    if st.button("💾 Save Monitor", type="primary", key=f"save_monitor_{key_suffix}"):
         try:
             # Parse steps JSON
             steps_data = json.loads(steps_json)
@@ -216,7 +275,15 @@ def render_monitor_editor(storage: Storage):
             # Parse email addresses
             alert_emails = [email.strip() for email in email_addresses.split('\n') if email.strip()]
 
-            # Create monitor
+            # Determine ID and Created At
+            monitor_id = None
+            created_at = datetime.now()
+            
+            if selected_monitor:
+                monitor_id = selected_monitor.id
+                created_at = selected_monitor.created_at
+
+            # Create monitor (updates if ID exists)
             monitor = Monitor(
                 name=monitor_name,
                 url=monitor_url,
@@ -225,24 +292,22 @@ def render_monitor_editor(storage: Storage):
                 schedule=schedule,
                 alert_emails=alert_emails,
                 slack_webhook_url=slack_webhook if slack_webhook else None,
-                alerts_enabled=alerts_enabled
+                alerts_enabled=alerts_enabled,
+                created_at=created_at,
+                updated_at=datetime.now()
             )
+            
+            if monitor_id:
+                monitor.id = monitor_id
 
             # Save to storage
             storage.save_monitor(monitor)
             st.success(f"✅ Monitor '{monitor_name}' saved successfully!")
-
-            # Offer to run it
-            if st.button("▶️ Run Now"):
-                with st.spinner(f"Running {monitor_name}..."):
-                    runner = MonitorRunner(headless=True)
-                    result = runner.run_monitor(monitor)
-                    storage.save_test_run(result)
-
-                    if result.status == 'success':
-                        st.success(f"✅ Test passed in {result.duration_ms / 1000:.2f}s")
-                    else:
-                        st.error(f"❌ Test failed: {result.error_message}")
+            
+            # Return to list view
+            st.session_state.monitor_view = 'list'
+            st.session_state.editing_monitor_id = None
+            st.rerun()
 
         except json.JSONDecodeError as e:
             st.error(f"Invalid JSON format: {str(e)}")

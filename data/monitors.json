@@ -65,29 +65,6 @@
     "updated_at": "2025-12-08T12:59:50.334452"
   },
   {
-    "id": "0bc1cac1-e071-4b8b-a179-5e3f22a21c62",
-    "name": "GitHub Homepage Check",
-    "url": "https://github.com",
-    "steps": [
-      {
-        "type": "navigate",
-        "url": "https://github.com"
-      },
-      {
-        "type": "verify",
-        "condition": "element_visible",
-        "selector": "a[href='/login']"
-      }
-    ],
-    "enabled": true,
-    "schedule": "*/5 * * * *",
-    "alert_emails": [],
-    "slack_webhook_url": null,
-    "alerts_enabled": true,
-    "created_at": "2025-12-08T12:59:50.334458",
-    "updated_at": "2025-12-08T12:59:50.334459"
-  },
-  {
     "id": "83ac60d7-dd1a-497d-9347-1203a11184fe",
     "name": "Example.com Basic Test",
     "url": "https://example.com",
@@ -110,5 +87,79 @@
     "alerts_enabled": true,
     "created_at": "2025-12-08T12:59:50.334463",
     "updated_at": "2025-12-08T12:59:50.334463"
+  },
+  {
+    "id": "21e2c5e0-fe25-4c47-8c0b-cd132b9349be",
+    "name": "dashboard",
+    "url": "https://dashboard.findmyorbit.com/dashboard?email=mycguo%40gmail.com",
+    "steps": [
+      {
+        "type": "navigate",
+        "url": "https://dashboard.findmyorbit.com/dashboard?email=mycguo%40gmail.com"
+      }
+    ],
+    "enabled": true,
+    "schedule": "*/5 * * * *",
+    "alert_emails": [],
+    "slack_webhook_url": null,
+    "alerts_enabled": true,
+    "created_at": "2025-12-11T23:38:51.163749",
+    "updated_at": "2025-12-11T23:38:51.163752"
+  },
+  {
+    "id": "9ea81ccb-a44b-4cb0-be58-77df0156721a",
+    "name": "dashboard",
+    "url": "https://dashboard.findmyorbit.com/dashboard?email=mycguo%40gmail.com",
+    "steps": [
+      {
+        "type": "navigate",
+        "url": "https://dashboard.findmyorbit.com/dashboard?email=mycguo%40gmail.com"
+      }
+    ],
+    "enabled": true,
+    "schedule": "*/5 * * * *",
+    "alert_emails": [],
+    "slack_webhook_url": null,
+    "alerts_enabled": true,
+    "created_at": "2025-12-11T23:39:02.245988",
+    "updated_at": "2025-12-11T23:39:02.245992"
+  },
+  {
+    "id": "0a807805-100e-4cdd-b5eb-5bdf351cd3aa",
+    "name": "findmyorbit dashboard",
+    "url": "https://dashboard.findmyorbit.com/dashboard?email=mycguo%40gmail.com",
+    "steps": [
+      {
+        "type": "navigate",
+        "url": "https://dashboard.findmyorbit.com/dashboard?email=mycguo%40gmail.com"
+      },
+      {
+        "type": "click",
+        "selector": ".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\:bg-gray-50.hover\\:text-gray-900"
+      },
+      {
+        "type": "click",
+        "selector": ".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\:bg-gray-50.hover\\:text-gray-900"
+      },
+      {
+        "type": "click",
+        "selector": ".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\:bg-gray-50.hover\\:text-gray-900"
+      },
+      {
+        "type": "click",
+        "selector": ".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\:bg-gray-50.hover\\:text-gray-900"
+      },
+      {
+        "type": "click",
+        "selector": ".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\:bg-gray-50.hover\\:text-gray-900"
+      }
+    ],
+    "enabled": true,
+    "schedule": "*/5 * * * *",
+    "alert_emails": [],
+    "slack_webhook_url": null,
+    "alerts_enabled": true,
+    "created_at": "2025-12-12T00:04:13.015885",
+    "updated_at": "2025-12-12T00:18:19.677544"
   }
 ]

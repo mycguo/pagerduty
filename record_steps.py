@@ -15,13 +15,8 @@ def main():
     try:
         steps = recorder.start(args.url)
         
-        # Wrap steps in the expected configuration format
-        config = {
-            "steps": steps
-        }
-        
         with open(args.output, "w") as f:
-            json.dump(config, f, indent=2)
+            json.dump(steps, f, indent=2)
             
         print(f"\nRecording finished! Steps saved to {args.output}")
         print("You can copy these steps into the 'Add Monitor' page.")

@@ -207,5 +207,166 @@
         "error_message": null
       }
     ]
+  },
+  {
+    "id": "1f4eea57-9e6f-421a-a729-c586a56e2008",
+    "monitor_id": "0bc1cac1-e071-4b8b-a179-5e3f22a21c62",
+    "status": "failed",
+    "started_at": "2025-12-09T12:45:55.111473",
+    "completed_at": "2025-12-09T12:46:08.311918",
+    "duration_ms": 13200,
+    "error_message": "Step 2 failed: Element 'a[href='/login']' is not visible",
+    "screenshot_path": "screenshots/0bc1cac1-e071-4b8b-a179-5e3f22a21c62_1f4eea57-9e6f-421a-a729-c586a56e2008.png",
+    "step_results": [
+      {
+        "step_index": 0,
+        "step": {
+          "type": "navigate",
+          "url": "https://github.com"
+        },
+        "status": "success",
+        "duration_ms": 1504,
+        "error_message": null
+      },
+      {
+        "step_index": 1,
+        "step": {
+          "type": "verify",
+          "condition": "element_visible",
+          "selector": "a[href='/login']"
+        },
+        "status": "failed",
+        "duration_ms": 10008,
+        "error_message": "Element 'a[href='/login']' is not visible"
+      }
+    ]
+  },
+  {
+    "id": "88cc1423-2103-46a2-a190-68dd23b11da1",
+    "monitor_id": "0a807805-100e-4cdd-b5eb-5bdf351cd3aa",
+    "status": "failed",
+    "started_at": "2025-12-12T00:05:00.728872",
+    "completed_at": "2025-12-12T00:05:16.754145",
+    "duration_ms": 16025,
+    "error_message": "Step 2 failed: Page.wait_for_selector: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator(\"button[type=\\\"submit\\\"]\") to be visible\n",
+    "screenshot_path": "screenshots/0a807805-100e-4cdd-b5eb-5bdf351cd3aa_88cc1423-2103-46a2-a190-68dd23b11da1.png",
+    "step_results": [
+      {
+        "step_index": 0,
+        "step": {
+          "type": "navigate",
+          "url": "https://dashboard.findmyorbit.com/dashboard?email=mycguo%40gmail.com"
+        },
+        "status": "success",
+        "duration_ms": 4363,
+        "error_message": null
+      },
+      {
+        "step_index": 1,
+        "step": {
+          "type": "click",
+          "selector": "button[type=\"submit\"]"
+        },
+        "status": "failed",
+        "duration_ms": 10006,
+        "error_message": "Page.wait_for_selector: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator(\"button[type=\\\"submit\\\"]\") to be visible\n"
+      }
+    ]
+  },
+  {
+    "id": "2223ef67-03dc-4ea0-80eb-00d2e6204f40",
+    "monitor_id": "6b508634-5bbe-4822-a3b3-69c45d81d55d",
+    "status": "failed",
+    "started_at": "2025-12-12T00:05:29.565698",
+    "completed_at": "2025-12-12T00:05:43.606957",
+    "duration_ms": 14041,
+    "error_message": "Step 2 failed: Page.wait_for_selector: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator(\"button[type=\\\"submit\\\"]\") to be visible\n",
+    "screenshot_path": "screenshots/6b508634-5bbe-4822-a3b3-69c45d81d55d_2223ef67-03dc-4ea0-80eb-00d2e6204f40.png",
+    "step_results": [
+      {
+        "step_index": 0,
+        "step": {
+          "type": "navigate",
+          "url": "https://dashboard.findmyorbit.com/dashboard?email=mycguo%40gmail.com"
+        },
+        "status": "success",
+        "duration_ms": 3664,
+        "error_message": null
+      },
+      {
+        "step_index": 1,
+        "step": {
+          "type": "click",
+          "selector": "button[type=\"submit\"]"
+        },
+        "status": "failed",
+        "duration_ms": 10005,
+        "error_message": "Page.wait_for_selector: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator(\"button[type=\\\"submit\\\"]\") to be visible\n"
+      }
+    ]
+  },
+  {
+    "id": "75d9ff73-9e5f-4f3d-872e-1c8b8e78ac2b",
+    "monitor_id": "6b508634-5bbe-4822-a3b3-69c45d81d55d",
+    "status": "failed",
+    "started_at": "2025-12-12T00:21:10.833893",
+    "completed_at": "2025-12-12T00:21:25.054474",
+    "duration_ms": 14220,
+    "error_message": "Step 2 failed: Page.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator(\".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\\\:bg-gray-50.hover\\\\:text-gray-900\")\n    - locator resolved to 5 elements. Proceeding with the first one: <a href=\"/right-fit-matcher?email=mycguo%40gmail.com\" class=\"w-full flex items-center justify-between text-left px-3 py-2 text-sm rounded-md transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900\">\u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n  - retrying click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <button aria-expanded=\"false\" aria-controls=\"submenu-apps\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</button> intercepts pointer events\n  - retrying click action\n    - waiting 20ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n  2 \u00d7 retrying click action\n      - waiting 100ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <a href=\"/dashboard/academic-profile?email=mycguo%40gmail.com\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</a> from <div class=\"relative group\">\u2026</div> subtree intercepts pointer events\n  4 \u00d7 retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <button aria-expanded=\"false\" aria-controls=\"submenu-apps\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</button> intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <a href=\"/dashboard/academic-profile?email=mycguo%40gmail.com\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</a> from <div class=\"relative group\">\u2026</div> subtree intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <a href=\"/dashboard/academic-profile?email=mycguo%40gmail.com\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</a> from <div class=\"relative group\">\u2026</div> subtree intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <button aria-expanded=\"false\" aria-controls=\"submenu-apps\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</button> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n",
+    "screenshot_path": "screenshots/6b508634-5bbe-4822-a3b3-69c45d81d55d_75d9ff73-9e5f-4f3d-872e-1c8b8e78ac2b.png",
+    "step_results": [
+      {
+        "step_index": 0,
+        "step": {
+          "type": "navigate",
+          "url": "https://dashboard.findmyorbit.com/dashboard?email=mycguo%40gmail.com"
+        },
+        "status": "success",
+        "duration_ms": 3785,
+        "error_message": null
+      },
+      {
+        "step_index": 1,
+        "step": {
+          "type": "click",
+          "selector": ".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\:bg-gray-50.hover\\:text-gray-900"
+        },
+        "status": "failed",
+        "duration_ms": 10045,
+        "error_message": "Page.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator(\".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\\\:bg-gray-50.hover\\\\:text-gray-900\")\n    - locator resolved to 5 elements. Proceeding with the first one: <a href=\"/right-fit-matcher?email=mycguo%40gmail.com\" class=\"w-full flex items-center justify-between text-left px-3 py-2 text-sm rounded-md transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900\">\u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n  - retrying click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <button aria-expanded=\"false\" aria-controls=\"submenu-apps\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</button> intercepts pointer events\n  - retrying click action\n    - waiting 20ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n  2 \u00d7 retrying click action\n      - waiting 100ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <a href=\"/dashboard/academic-profile?email=mycguo%40gmail.com\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</a> from <div class=\"relative group\">\u2026</div> subtree intercepts pointer events\n  4 \u00d7 retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <button aria-expanded=\"false\" aria-controls=\"submenu-apps\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</button> intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <a href=\"/dashboard/academic-profile?email=mycguo%40gmail.com\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</a> from <div class=\"relative group\">\u2026</div> subtree intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <a href=\"/dashboard/academic-profile?email=mycguo%40gmail.com\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</a> from <div class=\"relative group\">\u2026</div> subtree intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <button aria-expanded=\"false\" aria-controls=\"submenu-apps\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</button> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n"
+      }
+    ]
+  },
+  {
+    "id": "c61d3334-72f6-4224-b00e-5a3366c010bd",
+    "monitor_id": "0a807805-100e-4cdd-b5eb-5bdf351cd3aa",
+    "status": "failed",
+    "started_at": "2025-12-12T00:22:02.290035",
+    "completed_at": "2025-12-12T00:22:16.330846",
+    "duration_ms": 14040,
+    "error_message": "Step 2 failed: Page.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator(\".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\\\:bg-gray-50.hover\\\\:text-gray-900\")\n    - locator resolved to 5 elements. Proceeding with the first one: <a href=\"/right-fit-matcher?email=mycguo%40gmail.com\" class=\"w-full flex items-center justify-between text-left px-3 py-2 text-sm rounded-md transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900\">\u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n  - retrying click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <button aria-expanded=\"false\" aria-controls=\"submenu-apps\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</button> intercepts pointer events\n  - retrying click action\n    - waiting 20ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n  2 \u00d7 retrying click action\n      - waiting 100ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <a href=\"/dashboard/academic-profile?email=mycguo%40gmail.com\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</a> from <div class=\"relative group\">\u2026</div> subtree intercepts pointer events\n  4 \u00d7 retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <button aria-expanded=\"false\" aria-controls=\"submenu-apps\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</button> intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <a href=\"/dashboard/academic-profile?email=mycguo%40gmail.com\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</a> from <div class=\"relative group\">\u2026</div> subtree intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <a href=\"/dashboard/academic-profile?email=mycguo%40gmail.com\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</a> from <div class=\"relative group\">\u2026</div> subtree intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <button aria-expanded=\"false\" aria-controls=\"submenu-apps\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</button> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n",
+    "screenshot_path": "screenshots/0a807805-100e-4cdd-b5eb-5bdf351cd3aa_c61d3334-72f6-4224-b00e-5a3366c010bd.png",
+    "step_results": [
+      {
+        "step_index": 0,
+        "step": {
+          "type": "navigate",
+          "url": "https://dashboard.findmyorbit.com/dashboard?email=mycguo%40gmail.com"
+        },
+        "status": "success",
+        "duration_ms": 3617,
+        "error_message": null
+      },
+      {
+        "step_index": 1,
+        "step": {
+          "type": "click",
+          "selector": ".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\:bg-gray-50.hover\\:text-gray-900"
+        },
+        "status": "failed",
+        "duration_ms": 10043,
+        "error_message": "Page.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator(\".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\\\:bg-gray-50.hover\\\\:text-gray-900\")\n    - locator resolved to 5 elements. Proceeding with the first one: <a href=\"/right-fit-matcher?email=mycguo%40gmail.com\" class=\"w-full flex items-center justify-between text-left px-3 py-2 text-sm rounded-md transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900\">\u2026</a>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n  - retrying click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <button aria-expanded=\"false\" aria-controls=\"submenu-apps\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</button> intercepts pointer events\n  - retrying click action\n    - waiting 20ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n  2 \u00d7 retrying click action\n      - waiting 100ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <a href=\"/dashboard/academic-profile?email=mycguo%40gmail.com\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</a> from <div class=\"relative group\">\u2026</div> subtree intercepts pointer events\n  4 \u00d7 retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <button aria-expanded=\"false\" aria-controls=\"submenu-apps\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</button> intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <a href=\"/dashboard/academic-profile?email=mycguo%40gmail.com\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</a> from <div class=\"relative group\">\u2026</div> subtree intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n      - waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <a href=\"/dashboard/academic-profile?email=mycguo%40gmail.com\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</a> from <div class=\"relative group\">\u2026</div> subtree intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <button aria-expanded=\"false\" aria-controls=\"submenu-apps\" class=\"group w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900\">\u2026</button> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <nav class=\"flex-1 overflow-y-auto p-2 space-y-1\">\u2026</nav> intercepts pointer events\n  - retrying click action\n    - waiting 500ms\n"
+      }
+    ]
   }
 ]

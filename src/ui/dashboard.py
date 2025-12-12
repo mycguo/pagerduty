@@ -77,7 +77,7 @@ def render_dashboard(storage: Storage):
 
     if monitor_data:
         df = pd.DataFrame(monitor_data)
-        st.dataframe(df, use_container_width=True, hide_index=True)
+        st.dataframe(df, width="stretch", hide_index=True)
 
     # Recent test runs
     st.divider()
@@ -112,7 +112,7 @@ def render_dashboard(storage: Storage):
                 color_discrete_map={'success': '#28a745', 'failed': '#dc3545', 'error': '#ffc107'}
             )
             fig.update_layout(height=300)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
         with col2:
             st.markdown("**Response Time Trend**")
@@ -124,13 +124,13 @@ def render_dashboard(storage: Storage):
                 markers=True
             )
             fig.update_layout(height=300)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
         # Recent runs table
         st.markdown("**Latest Test Runs**")
         display_df = runs_df.copy()
         display_df['Timestamp'] = display_df['Timestamp'].dt.strftime("%Y-%m-%d %H:%M:%S")
         display_df['Duration (s)'] = display_df['Duration (s)'].round(2)
-        st.dataframe(display_df.head(20), use_container_width=True, hide_index=True)
+        st.dataframe(display_df.head(20), width="stretch", hide_index=True)
     else:
         st.info("No test runs yet. Run a monitor to see results.")

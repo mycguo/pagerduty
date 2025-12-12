@@ -1,92 +1,30 @@
-{
-  "steps": [
-    {
-      "type": "navigate",
-      "url": "https://dashboard.findmyorbit.com/scholarship-matcher?email=mycguo%40gmail.com"
-    },
-    {
-      "type": "click",
-      "selector": "button[type=\"submit\"]"
-    },
-    {
-      "type": "click",
-      "selector": ".file:text-foreground.placeholder:text-muted-foreground.selection:bg-primary.selection:text-primary-foreground.dark:bg-input/30.border-input.flex.h-9.min-w-0.rounded-sm.border.bg-transparent.px-3.py-1.text-base.shadow-xs.transition-[color,box-shadow].outline-none.file:inline-flex.file:h-7.file:border-0.file:bg-transparent.file:text-sm.file:font-medium.disabled:pointer-events-none.disabled:cursor-not-allowed.disabled:opacity-50.md:text-sm.focus-visible:border-ring.focus-visible:ring-ring/50.focus-visible:ring-[3px].aria-invalid:ring-destructive/20.dark:aria-invalid:ring-destructive/40.aria-invalid:border-destructive.w-full"
-    },
-    {
-      "type": "fill",
-      "selector": ".file:text-foreground.placeholder:text-muted-foreground.selection:bg-primary.selection:text-primary-foreground.dark:bg-input/30.border-input.flex.h-9.min-w-0.rounded-sm.border.bg-transparent.px-3.py-1.text-base.shadow-xs.transition-[color,box-shadow].outline-none.file:inline-flex.file:h-7.file:border-0.file:bg-transparent.file:text-sm.file:font-medium.disabled:pointer-events-none.disabled:cursor-not-allowed.disabled:opacity-50.md:text-sm.focus-visible:border-ring.focus-visible:ring-ring/50.focus-visible:ring-[3px].aria-invalid:ring-destructive/20.dark:aria-invalid:ring-destructive/40.aria-invalid:border-destructive.w-full",
-      "value": "2.3"
-    },
-    {
-      "type": "click",
-      "selector": ".w-full.h-10.px-3.py-2.text-sm.border.border-gray-200.rounded-md.focus:outline-none.focus:ring-2.focus:ring-purple-500"
-    },
-    {
-      "type": "fill",
-      "selector": ".w-full.h-10.px-3.py-2.text-sm.border.border-gray-200.rounded-md.focus:outline-none.focus:ring-2.focus:ring-purple-500",
-      "value": "US"
-    },
-    {
-      "type": "click",
-      "selector": ".w-full.h-10.px-3.py-2.text-sm.border.border-gray-200.rounded-md.focus:outline-none.focus:ring-2.focus:ring-purple-500"
-    },
-    {
-      "type": "click",
-      "selector": ".w-full.h-10.px-3.py-2.text-sm.border.border-gray-200.rounded-md.focus:outline-none.focus:ring-2.focus:ring-purple-500"
-    },
-    {
-      "type": "fill",
-      "selector": ".w-full.h-10.px-3.py-2.text-sm.border.border-gray-200.rounded-md.focus:outline-none.focus:ring-2.focus:ring-purple-500",
-      "value": "Male"
-    },
-    {
-      "type": "click",
-      "selector": ".w-full.h-10.px-3.py-2.text-sm.border.border-gray-200.rounded-md.focus:outline-none.focus:ring-2.focus:ring-purple-500"
-    },
-    {
-      "type": "click",
-      "selector": "button[type=\"submit\"]"
-    },
-    {
-      "type": "click",
-      "selector": "button[type=\"submit\"]"
-    },
-    {
-      "type": "click",
-      "selector": ".p-2.hover:bg-purple-50.rounded.cursor-pointer.transition-colors.duration-200.text-sm"
-    },
-    {
-      "type": "click",
-      "selector": ".file:text-foreground.placeholder:text-muted-foreground.selection:bg-primary.selection:text-primary-foreground.dark:bg-input/30.border-input.flex.h-9.min-w-0.rounded-sm.border.bg-transparent.px-3.py-1.text-base.shadow-xs.transition-[color,box-shadow].outline-none.file:inline-flex.file:h-7.file:border-0.file:bg-transparent.file:text-sm.file:font-medium.disabled:pointer-events-none.disabled:cursor-not-allowed.disabled:opacity-50.md:text-sm.focus-visible:border-ring.focus-visible:ring-ring/50.focus-visible:ring-[3px].aria-invalid:ring-destructive/20.dark:aria-invalid:ring-destructive/40.aria-invalid:border-destructive.w-full"
-    },
-    {
-      "type": "click",
-      "selector": ".flex.flex-1.overflow-hidden"
-    },
-    {
-      "type": "click",
-      "selector": ".file:text-foreground.placeholder:text-muted-foreground.selection:bg-primary.selection:text-primary-foreground.dark:bg-input/30.border-input.flex.h-9.min-w-0.rounded-sm.border.bg-transparent.px-3.py-1.text-base.shadow-xs.transition-[color,box-shadow].outline-none.file:inline-flex.file:h-7.file:border-0.file:bg-transparent.file:text-sm.file:font-medium.disabled:pointer-events-none.disabled:cursor-not-allowed.disabled:opacity-50.md:text-sm.focus-visible:border-ring.focus-visible:ring-ring/50.focus-visible:ring-[3px].aria-invalid:ring-destructive/20.dark:aria-invalid:ring-destructive/40.aria-invalid:border-destructive.w-full"
-    },
-    {
-      "type": "fill",
-      "selector": ".file:text-foreground.placeholder:text-muted-foreground.selection:bg-primary.selection:text-primary-foreground.dark:bg-input/30.border-input.flex.h-9.min-w-0.rounded-sm.border.bg-transparent.px-3.py-1.text-base.shadow-xs.transition-[color,box-shadow].outline-none.file:inline-flex.file:h-7.file:border-0.file:bg-transparent.file:text-sm.file:font-medium.disabled:pointer-events-none.disabled:cursor-not-allowed.disabled:opacity-50.md:text-sm.focus-visible:border-ring.focus-visible:ring-ring/50.focus-visible:ring-[3px].aria-invalid:ring-destructive/20.dark:aria-invalid:ring-destructive/40.aria-invalid:border-destructive.w-full",
-      "value": "4"
-    },
-    {
-      "type": "click",
-      "selector": "button[type=\"submit\"]"
-    },
-    {
-      "type": "click",
-      "selector": "button[type=\"submit\"]"
-    },
-    {
-      "type": "click",
-      "selector": ".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.bg-blue-50.text-blue-600.font-medium"
-    },
-    {
-      "type": "click",
-      "selector": "button[type=\"submit\"]"
-    }
-  ]
-}
+[
+  {
+    "type": "navigate",
+    "url": "https://dashboard.findmyorbit.com/dashboard?email=mycguo%40gmail.com"
+  },
+  {
+    "type": "click",
+    "selector": "button[type=\"submit\"]"
+  },
+  {
+    "type": "click",
+    "selector": ".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\:bg-gray-50.hover\\:text-gray-900"
+  },
+  {
+    "type": "click",
+    "selector": ".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\:bg-gray-50.hover\\:text-gray-900"
+  },
+  {
+    "type": "click",
+    "selector": ".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\:bg-gray-50.hover\\:text-gray-900"
+  },
+  {
+    "type": "click",
+    "selector": ".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\:bg-gray-50.hover\\:text-gray-900"
+  },
+  {
+    "type": "click",
+    "selector": ".w-full.flex.items-center.justify-between.text-left.px-3.py-2.text-sm.rounded-md.transition-colors.text-gray-600.hover\\:bg-gray-50.hover\\:text-gray-900"
+  }
+]

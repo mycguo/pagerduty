@@ -77,7 +77,7 @@ def render_results(storage: Storage):
                 # Show screenshot if available
                 if run.screenshot_path:
                     try:
-                        st.image(run.screenshot_path, caption="Screenshot on failure", use_container_width=True)
+                        st.image(run.screenshot_path, caption="Screenshot on failure", width="stretch")
                     except:
                         st.warning("Screenshot not found")
 
@@ -117,4 +117,4 @@ def render_results(storage: Storage):
                     })
 
                 df = pd.DataFrame(step_data)
-                st.dataframe(df, use_container_width=True, hide_index=True)
+                st.dataframe(df, width="stretch", hide_index=True)
