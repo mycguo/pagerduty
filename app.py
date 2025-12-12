@@ -27,24 +27,24 @@ def get_storage():
 
 storage = get_storage()
 
-# Initialize Scheduler
-@st.cache_resource
-def get_scheduler(_storage_instance):
-    return MonitorScheduler(_storage_instance)
-
-scheduler = get_scheduler(storage)
-# Sync jobs on every run to ensure updates are reflected
-scheduler.sync_jobs()
+# Initialize Scheduler (DISABLED for Streamlit Cloud)
+# @st.cache_resource
+# def get_scheduler(_storage_instance):
+#     return MonitorScheduler(_storage_instance)
+# 
+# scheduler = get_scheduler(storage)
+# # Sync jobs on every run to ensure updates are reflected
+# scheduler.sync_jobs()
 
 # Sidebar
 st.sidebar.title("🔍 Web Monitor")
 st.sidebar.caption("Automated Browser Testing")
 
-# Scheduler Status
-st.sidebar.markdown("---")
-st.sidebar.markdown("**System Status**")
-st.sidebar.markdown(f"scheduler: {'🟢 Running' if scheduler.scheduler.running else '🔴 Stopped'}")
-st.sidebar.markdown("---")
+# Scheduler Status (DISABLED)
+# st.sidebar.markdown("---")
+# st.sidebar.markdown("**System Status**")
+# st.sidebar.markdown(f"scheduler: {'🟢 Running' if scheduler.scheduler.running else '🔴 Stopped'}")
+# st.sidebar.markdown("---")
 
 page = st.sidebar.radio("Navigation", ["📊 Dashboard", "⚙️ Monitors", "📝 Test Results"], label_visibility="collapsed")
 
