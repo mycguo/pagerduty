@@ -245,19 +245,53 @@ def render_monitor_editor(storage: Storage):
         )
 
         st.markdown("**Slack Alerts**")
-        slack_webhook = st.text_input(
-            "Slack Webhook URL",
-            value=default_slack,
-            placeholder="https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
-            help="Enter your Slack webhook URL to send notifications to a Slack channel",
-            key=f"monitor_slack_{key_suffix}"
-        )
+        
+        # Check if configured in secrets
+        secret_webhook = None
+        try:
+            secret_webhook = st.secrets.get("slack_webhook_url")
+        except FileNotFoundError:
+            pass
 
-        if slack_webhook:
+        if secret_webhook:
+            st.info("✅ Using Slack Webhook from secrets configuration.")
+            slack_webhook = secret_webhook # Use secret for testing/saving logic locally if needed, 
+                                           # or better: don't save it to the object if it matches secret.
+                                           # For simplicity, we can leave the field empty in UI and logic handles it?
+                                           # But we need to be able to test it.
+            
+            # If we want to allow overriding, we could show the input still. 
+            # But request was to remove from JSON. So we should NOT save it if it's the secret.
+            
+            use_override = st.checkbox("Override secret webhook")
+            if use_override:
+                 slack_webhook_input = st.text_input(
+                    "Slack Webhook URL (Override)",
+                    value=default_slack if default_slack != secret_webhook else "",
+                    placeholder="https://hooks.slack.com/...",
+                    key=f"monitor_slack_{key_suffix}"
+                )
+                 slack_webhook = slack_webhook_input
+            else:
+                 slack_webhook = None # Don't save it to the monitor object
+                 
+        else:
+            slack_webhook = st.text_input(
+                "Slack Webhook URL",
+                value=default_slack,
+                placeholder="https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+                help="Enter your Slack webhook URL to send notifications to a Slack channel",
+                key=f"monitor_slack_{key_suffix}"
+            )
+
+        # Test button logic
+        test_url = slack_webhook or secret_webhook
+        if test_url:
             from src.alerts.slack_alert import SlackAlert
             if st.button("🧪 Test Slack Webhook", key=f"test_slack_{key_suffix}"):
                 slack_alert = SlackAlert()
-                if slack_alert.send_test_message(slack_webhook):
+                # If we have a local override/input, test that. Otherwise test the secret.
+                if slack_alert.send_test_message(test_url):
                     st.success("✅ Test message sent to Slack!")
                 else:
                     st.error("❌ Failed to send test message. Check your webhook URL.")

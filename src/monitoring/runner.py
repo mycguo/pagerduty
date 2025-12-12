@@ -110,8 +110,8 @@ class MonitorRunner:
             self.email_alert.send_alert(monitor.name, test_run_dict)
 
         # Send Slack alerts
-        if monitor.slack_webhook_url:
-            self.slack_alert.send_alert(monitor.name, test_run_dict)
+        # Always call send_alert; the handler will check for secrets if url is missing
+        self.slack_alert.send_alert(monitor.name, test_run_dict)
 
     def run_monitors(self, monitors: List[Monitor]) -> List[TestRun]:
         """

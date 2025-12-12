@@ -1,4 +1,4 @@
-"""Slack webhook alert handler."""
+import streamlit as st
 import requests
 from typing import Dict, Any
 from datetime import datetime
@@ -14,7 +14,7 @@ class SlackAlert(AlertHandler):
         Initialize Slack alert handler.
 
         Args:
-            webhook_url: Slack webhook URL (default: from monitor config)
+            webhook_url: Slack webhook URL (default: from monitor config or secrets)
         """
         self.webhook_url = webhook_url
 
@@ -29,10 +29,19 @@ class SlackAlert(AlertHandler):
         Returns:
             True if alert was sent successfully, False otherwise
         """
+        # Priority: 1. Constructor arg (not used much now) 2. Run/Monitor config 3. Secrets
         webhook_url = self.webhook_url or test_run.get('slack_webhook_url')
+        
+        if not webhook_url:
+            # Try secrets
+            try:
+                webhook_url = st.secrets.get("slack_webhook_url")
+            except FileNotFoundError:
+                pass # Secrets file might not exist
 
         if not webhook_url:
-            print("Slack webhook URL not configured.")
+            # Silent fail if just not configured, but log it
+            # print("Slack webhook URL not configured.") 
             return False
 
         try:

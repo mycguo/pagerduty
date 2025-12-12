@@ -17,7 +17,6 @@
     "enabled": false,
     "schedule": "*/5 * * * *",
     "alert_emails": [],
-    "slack_webhook_url": null,
     "alerts_enabled": true,
     "created_at": "2025-12-08T12:58:26.723016",
     "updated_at": "2025-12-12T01:04:20.523152"
@@ -59,7 +58,6 @@
     "enabled": true,
     "schedule": "*/5 * * * *",
     "alert_emails": [],
-    "slack_webhook_url": null,
     "alerts_enabled": true,
     "created_at": "2025-12-08T12:59:50.334448",
     "updated_at": "2025-12-08T12:59:50.334452"
@@ -83,7 +81,6 @@
     "enabled": false,
     "schedule": "*/5 * * * *",
     "alert_emails": [],
-    "slack_webhook_url": null,
     "alerts_enabled": true,
     "created_at": "2025-12-08T12:59:50.334463",
     "updated_at": "2025-12-12T01:04:30.810476"
@@ -101,7 +98,6 @@
     "enabled": false,
     "schedule": "*/5 * * * *",
     "alert_emails": [],
-    "slack_webhook_url": "https://hooks.slack.com/services/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",
     "alerts_enabled": true,
     "created_at": "2025-12-11T23:38:51.163749",
     "updated_at": "2025-12-12T01:03:57.065299"
@@ -119,7 +115,6 @@
     "enabled": false,
     "schedule": "*/5 * * * *",
     "alert_emails": [],
-    "slack_webhook_url": null,
     "alerts_enabled": true,
     "created_at": "2025-12-11T23:39:02.245988",
     "updated_at": "2025-12-12T01:04:12.085921"
@@ -157,7 +152,6 @@
     "enabled": true,
     "schedule": "*/5 * * * *",
     "alert_emails": [],
-    "slack_webhook_url": "https://hooks.slack.com/services/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",
     "alerts_enabled": true,
     "created_at": "2025-12-12T00:04:13.015885",
     "updated_at": "2025-12-12T01:01:27.865077"
