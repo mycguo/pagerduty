@@ -1,6 +1,7 @@
 """Monitor configuration UI."""
 import streamlit as st
 import json
+import os
 from datetime import datetime
 
 from src.monitoring.monitor import Monitor
@@ -246,12 +247,13 @@ def render_monitor_editor(storage: Storage):
 
         st.markdown("**Slack Alerts**")
         
-        # Check if configured in secrets
-        secret_webhook = None
-        try:
-            secret_webhook = st.secrets.get("slack_webhook_url")
-        except FileNotFoundError:
-            pass
+        # Check if configured in environment or secrets
+        secret_webhook = os.getenv("SLACK_WEBHOOK_URL")  # Railway/Docker
+        if not secret_webhook:
+            try:
+                secret_webhook = st.secrets.get("slack_webhook_url")  # Local development
+            except (FileNotFoundError, KeyError):
+                pass
 
         if secret_webhook:
             st.info("✅ Using Slack Webhook from secrets configuration.")
