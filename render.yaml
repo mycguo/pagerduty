@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: web-monitoring-dashboard
+    env: python
+    buildCommand: pip install -r requirements.txt && playwright install chromium && playwright install-deps chromium
+    startCommand: streamlit run app.py --server.port=$PORT --server.address=0.0.0.0
+    envVars:
+      - key: PORT
+        value: 8501
+    # NOTE: Do NOT add secrets here! Add them in Render Dashboard instead:
+    # 1. Go to your service → Environment tab
+    # 2. Click "Add Environment Variable"
+    # 3. Add secrets like:
+    #    - SLACK_WEBHOOK_URL
+    #    - SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, SMTP_FROM_EMAIL
+    #    - Any other sensitive credentials
+
