@@ -37,7 +37,6 @@ screenshots/
 # Data
 *.db
 *.sqlite
-data/
 
 # IDE
 .vscode/
