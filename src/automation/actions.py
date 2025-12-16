@@ -3,6 +3,7 @@ from typing import Dict, Any
 from playwright.sync_api import Page, TimeoutError as PlaywrightTimeoutError
 import time
 import os
+import traceback
 
 
 class ActionExecutor:
@@ -30,6 +31,8 @@ class ActionExecutor:
         start_time = time.time()
         step_type = step.get('type')
 
+        print(f"[ActionExecutor] Executing step type: {step_type}")
+
         try:
             if step_type == 'navigate':
                 self._navigate(step)
@@ -51,6 +54,7 @@ class ActionExecutor:
                 raise ValueError(f"Unknown step type: {step_type}")
 
             duration_ms = int((time.time() - start_time) * 1000)
+            print(f"[ActionExecutor] ✓ Step completed successfully in {duration_ms}ms")
             return {
                 'status': 'success',
                 'duration_ms': duration_ms,
@@ -59,10 +63,24 @@ class ActionExecutor:
 
         except Exception as e:
             duration_ms = int((time.time() - start_time) * 1000)
+            error_msg = str(e)
+
+            print(f"[ActionExecutor] ❌ Step failed after {duration_ms}ms")
+            print(f"[ActionExecutor] Error type: {type(e).__name__}")
+            print(f"[ActionExecutor] Error message: {error_msg}")
+
+            # Log timeout errors with more detail
+            if isinstance(e, PlaywrightTimeoutError):
+                print(f"[ActionExecutor] This was a Playwright timeout error")
+                print(f"[ActionExecutor] Current URL: {self.page.url}")
+
+            print(f"[ActionExecutor] Full traceback:")
+            traceback.print_exc()
+
             return {
                 'status': 'failed',
                 'duration_ms': duration_ms,
-                'error_message': str(e)
+                'error_message': error_msg
             }
 
     def _navigate(self, step: Dict[str, Any]):
@@ -190,8 +208,22 @@ class ActionExecutor:
     def _screenshot(self, step: Dict[str, Any]):
         """Take a screenshot."""
         path = step.get('path', 'screenshots/screenshot.png')
+        full_page = step.get('full_page', False)
+        timeout = step.get('timeout', 10000)
+
         os.makedirs(os.path.dirname(path), exist_ok=True)
-        self.page.screenshot(path=path, full_page=True)
+
+        try:
+            # Wait for page to be stable before screenshot
+            self.page.wait_for_load_state('domcontentloaded', timeout=5000)
+            self.page.screenshot(path=path, full_page=full_page, timeout=timeout)
+        except Exception as e:
+            # If full_page screenshot fails, try viewport-only as fallback
+            if full_page:
+                print(f"[ActionExecutor] Full page screenshot failed, trying viewport-only: {str(e)}")
+                self.page.screenshot(path=path, full_page=False, timeout=5000)
+            else:
+                raise
 
     def _execute_script(self, step: Dict[str, Any]):
         """Execute JavaScript on the page."""

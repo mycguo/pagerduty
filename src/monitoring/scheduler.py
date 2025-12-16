@@ -20,38 +20,51 @@ class MonitorScheduler:
         }
         self.scheduler = BackgroundScheduler(executors=executors)
         self.scheduler.start()
+        print("[MonitorScheduler] ✓ Scheduler started successfully")
         logger.info("MonitorScheduler started")
 
     def run_monitor_job(self, monitor_id: str):
         """Job function to run a specific monitor."""
+        print(f"\n[MonitorScheduler] ======================================")
+        print(f"[MonitorScheduler] Scheduled job triggered for monitor ID: {monitor_id}")
+        print(f"[MonitorScheduler] ======================================\n")
+
         # Reload monitor from storage to get latest config/enabled state
         monitor = self.storage.get_monitor(monitor_id)
-        
+
         if not monitor:
+            print(f"[MonitorScheduler] ⚠️  Monitor {monitor_id} not found during scheduled run")
             logger.warning(f"Monitor {monitor_id} not found during scheduled run")
             return
-            
+
         if not monitor.enabled:
+            print(f"[MonitorScheduler] ⚠️  Monitor {monitor.name} is disabled, skipping scheduled run")
             logger.info(f"Monitor {monitor.name} is disabled, skipping scheduled run")
             return
 
+        print(f"[MonitorScheduler] Starting scheduled run for: {monitor.name}")
         logger.info(f"Starting scheduled run for {monitor.name}")
         runner = MonitorRunner(headless=True)
         try:
             result = runner.run_monitor(monitor)
             self.storage.save_test_run(result)
+            print(f"[MonitorScheduler] ✓ Scheduled run completed: {result.status}")
             logger.info(f"Scheduled run for {monitor.name} completed: {result.status}")
         except Exception as e:
+            print(f"[MonitorScheduler] ❌ Scheduled run failed: {str(e)}")
             logger.error(f"Scheduled run for {monitor.name} failed: {e}")
 
     def sync_jobs(self):
         """Synchronize scheduler jobs with current monitor configuration."""
+        print(f"[MonitorScheduler] Syncing scheduled jobs...")
         monitors = self.storage.get_monitors()
         active_monitor_ids = set()
 
+        print(f"[MonitorScheduler] Found {len(monitors)} monitors")
+
         for monitor in monitors:
             job_id = f"monitor_job_{monitor.id}"
-            
+
             if monitor.enabled:
                 try:
                     # Update or create job
@@ -65,19 +78,25 @@ class MonitorScheduler:
                         name=f"Run {monitor.name}"
                     )
                     active_monitor_ids.add(job_id)
+                    print(f"[MonitorScheduler] ✓ Scheduled: {monitor.name} ({monitor.schedule})")
                     logger.info(f"Scheduled job for {monitor.name} with schedule: {monitor.schedule}")
                 except Exception as e:
+                    print(f"[MonitorScheduler] ❌ Failed to schedule {monitor.name}: {str(e)}")
                     logger.error(f"Failed to schedule {monitor.name}: {e}")
             else:
                  # If disabled, ensure no job exists
                 if self.scheduler.get_job(job_id):
+                    print(f"[MonitorScheduler] Removing job for disabled monitor: {monitor.name}")
                     self.scheduler.remove_job(job_id)
 
         # Cleanup jobs for deleted monitors
         for job in self.scheduler.get_jobs():
             if job.id.startswith("monitor_job_") and job.id not in active_monitor_ids:
+                print(f"[MonitorScheduler] Removing stale job: {job.id}")
                 self.scheduler.remove_job(job.id)
                 logger.info(f"Removed stale job: {job.id}")
+
+        print(f"[MonitorScheduler] ✓ Job sync complete. Active jobs: {len(active_monitor_ids)}")
 
     def shutdown(self):
         """Stop the scheduler."""

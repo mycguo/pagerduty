@@ -247,15 +247,32 @@ python scripts/backup_monitors.py --restore backups/monitors_backup_latest.json
 
 ## Debugging Tips
 
-### Enable Console Logging on Render
+### Detailed Console Logging
 
-The app includes comprehensive print statements prefixed with `[Storage]`, `[PostgresStorage]`, etc. These appear in Render's console logs since the free tier doesn't provide shell access.
+The app includes **comprehensive detailed logging** throughout the entire monitor execution pipeline. All logs use print statements (not Python's logging module) to ensure they appear immediately in Render's console logs.
 
-Look for these sections in deployment logs:
-1. Init script output showing disk mounting status
-2. Migration script output showing monitor migration
-3. Storage initialization showing which backend was selected
-4. Monitor loading confirmation
+**See `DETAILED_LOGGING.md` for complete documentation.**
+
+Log prefixes to search for in Render console:
+- `[MonitorRunner]` - Monitor execution, step-by-step progress, errors
+- `[ActionExecutor]` - Individual step execution with timing and errors
+- `[BrowserManager]` - Browser lifecycle and screenshot operations
+- `[MonitorScheduler]` - Scheduled job triggers and sync operations
+- `[Storage]` - File-based storage operations
+- `[PostgresStorage]` - Database storage operations
+
+Key features:
+- Full stack traces for all errors
+- Step-by-step execution logs with timing
+- Screenshot operation details (timeout, fallback attempts)
+- Clear status indicators (✓ success, ❌ failure, ⚠️  warning)
+- Playwright timeout detection with current URL
+
+Example searches in Render logs:
+- `❌` - Find all errors
+- `[MonitorRunner] Starting monitor: YourMonitorName` - Track specific monitor
+- `TimeoutError` - Find timeout issues
+- `[BrowserManager] Taking screenshot` - Debug screenshot problems
 
 ### Test Monitors Locally with Browser Visible
 
