@@ -27,6 +27,9 @@ screenshots/
 data/monitors.json
 data/test_results.json
 
+# But allow default_monitors.json to be included
+!default_monitors.json
+
 # Documentation
 *.md
 !readme.md

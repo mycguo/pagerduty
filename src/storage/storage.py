@@ -10,25 +10,39 @@ from src.monitoring.monitor import Monitor, TestRun
 class Storage:
     """Handles persistence of monitors and test results."""
 
-    def __init__(self, data_dir: str = "data"):
+    def __init__(self, data_dir: str = None):
         """
         Initialize storage.
 
         Args:
-            data_dir: Directory to store data files
+            data_dir: Directory to store data files. If None, uses environment variable
+                     DATA_DIR or defaults to "/app/data" in Docker, "./data" locally.
         """
         import logging
         logger = logging.getLogger(__name__)
-        
+
+        # Determine data directory
+        if data_dir is None:
+            # Check environment variable first
+            data_dir = os.getenv("DATA_DIR")
+
+            # If not set, use sensible defaults
+            if data_dir is None:
+                # Check if running in Docker (common indicator)
+                if os.path.exists("/.dockerenv") or os.getenv("RENDER"):
+                    data_dir = "/app/data"
+                else:
+                    data_dir = "data"
+
         # Use absolute path to avoid issues with working directory changes
         if not os.path.isabs(data_dir):
             # Get absolute path relative to current working directory
             self.data_dir = Path(os.getcwd()) / data_dir
         else:
             self.data_dir = Path(data_dir)
-        
+
         self.data_dir.mkdir(parents=True, exist_ok=True)
-        
+
         # Make directory writable
         try:
             os.chmod(self.data_dir, 0o777)
@@ -37,9 +51,10 @@ class Storage:
 
         self.monitors_file = self.data_dir / "monitors.json"
         self.results_file = self.data_dir / "test_results.json"
-        
+
         logger.info(f"Storage initialized. Data directory: {self.data_dir.absolute()}")
         logger.info(f"Monitors file: {self.monitors_file.absolute()}")
+        logger.info(f"Monitors file exists: {self.monitors_file.exists()}")
 
         # Initialize files if they don't exist
         if not self.monitors_file.exists():

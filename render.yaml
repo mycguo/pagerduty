@@ -6,6 +6,10 @@ services:
     envVars:
       - key: PORT
         value: 8501
+      - key: DATA_DIR
+        value: /app/data
+      - key: RENDER
+        value: "true"
     # Persistent disk for monitors and test results
     disk:
       name: monitoring-data

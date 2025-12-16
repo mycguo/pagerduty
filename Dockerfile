@@ -45,12 +45,8 @@ RUN playwright install-deps chromium
 # Copy application code
 COPY . .
 
-# Preserve default monitors for initialization on first run
-# The persistent disk will mount at /app/data, so we keep defaults elsewhere
-RUN mkdir -p /app/default_data && \
-    if [ -f /app/data/monitors.json ]; then \
-        cp /app/data/monitors.json /app/default_data/monitors.json; \
-    fi
+# The default_monitors.json will be copied via COPY command above
+# No need to conditionally copy since it's now part of the repo
 
 # Create data directory and ensure it's writable
 # This ensures runtime data persists (if using Render disk, mount it here)
