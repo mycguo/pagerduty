@@ -1,27 +1,5 @@
 [
   {
-    "id": "9adb58a5-0f53-4e31-8e1e-807498d86062",
-    "name": "Test Example.com",
-    "url": "https://example.com",
-    "steps": [
-      {
-        "type": "navigate",
-        "url": "https://example.com"
-      },
-      {
-        "type": "verify",
-        "condition": "element_exists",
-        "selector": "h1"
-      }
-    ],
-    "enabled": false,
-    "schedule": "*/5 * * * *",
-    "alert_emails": [],
-    "alerts_enabled": true,
-    "created_at": "2025-12-08T12:58:26.723016",
-    "updated_at": "2025-12-12T01:04:20.523152"
-  },
-  {
     "id": "1b90b4a8-a53b-4902-80ca-154429f17806",
     "name": "Wikipedia Health Check",
     "url": "https://www.wikipedia.org",
