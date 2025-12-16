@@ -344,13 +344,29 @@ def render_monitor_editor(storage: Storage):
                 monitor.id = monitor_id
 
             # Save to storage
-            storage.save_monitor(monitor)
-            st.success(f"✅ Monitor '{monitor_name}' saved successfully!")
-            
-            # Return to list view
-            st.session_state.monitor_view = 'list'
-            st.session_state.editing_monitor_id = None
-            st.rerun()
+            try:
+                storage.save_monitor(monitor)
+                
+                # Verify save by reading back
+                saved_monitor = storage.get_monitor(monitor.id)
+                if not saved_monitor:
+                    st.error(f"❌ Failed to save: Monitor not found after save")
+                    return
+                
+                # Check if the saved data matches
+                if saved_monitor.name != monitor_name or saved_monitor.url != monitor_url:
+                    st.warning(f"⚠️ Save completed but data may not match. Please refresh and check.")
+                else:
+                    st.success(f"✅ Monitor '{monitor_name}' saved successfully!")
+                
+                # Return to list view
+                st.session_state.monitor_view = 'list'
+                st.session_state.editing_monitor_id = None
+                st.rerun()
+            except Exception as e:
+                st.error(f"❌ Error saving monitor: {str(e)}")
+                import traceback
+                st.code(traceback.format_exc())
 
         except json.JSONDecodeError as e:
             st.error(f"Invalid JSON format: {str(e)}")

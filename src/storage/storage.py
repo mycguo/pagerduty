@@ -17,30 +17,72 @@ class Storage:
         Args:
             data_dir: Directory to store data files
         """
-        self.data_dir = Path(data_dir)
-        self.data_dir.mkdir(exist_ok=True)
+        import logging
+        logger = logging.getLogger(__name__)
+        
+        # Use absolute path to avoid issues with working directory changes
+        if not os.path.isabs(data_dir):
+            # Get absolute path relative to current working directory
+            self.data_dir = Path(os.getcwd()) / data_dir
+        else:
+            self.data_dir = Path(data_dir)
+        
+        self.data_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Make directory writable
+        try:
+            os.chmod(self.data_dir, 0o777)
+        except Exception:
+            pass  # Ignore permission errors
 
         self.monitors_file = self.data_dir / "monitors.json"
         self.results_file = self.data_dir / "test_results.json"
+        
+        logger.info(f"Storage initialized. Data directory: {self.data_dir.absolute()}")
+        logger.info(f"Monitors file: {self.monitors_file.absolute()}")
 
         # Initialize files if they don't exist
         if not self.monitors_file.exists():
+            logger.info("monitors.json does not exist, creating empty file")
             self._save_json(self.monitors_file, [])
+        else:
+            logger.info(f"monitors.json exists with {len(self._load_json(self.monitors_file))} monitors")
+            
         if not self.results_file.exists():
             self._save_json(self.results_file, [])
 
     def _save_json(self, file_path: Path, data: list):
         """Save data to JSON file."""
+        import logging
+        logger = logging.getLogger(__name__)
+        
+        # Ensure directory exists
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        
         # Use atomic write: write to temp file first, then rename
         # This ensures data integrity and prevents partial writes
         temp_file = file_path.with_suffix('.tmp')
-        with open(temp_file, 'w') as f:
-            json.dump(data, f, indent=2)
-            f.flush()
-            os.fsync(f.fileno())  # Force write to disk
         
-        # Atomic rename (works on most filesystems)
-        temp_file.replace(file_path)
+        try:
+            with open(temp_file, 'w') as f:
+                json.dump(data, f, indent=2)
+                f.flush()
+                os.fsync(f.fileno())  # Force write to disk
+            
+            # Atomic rename (works on most filesystems)
+            temp_file.replace(file_path)
+            
+            # Verify file was written
+            if not file_path.exists():
+                raise RuntimeError(f"File {file_path} does not exist after save")
+            
+            logger.info(f"Successfully saved {len(data)} items to {file_path}")
+        except Exception as e:
+            logger.error(f"Failed to save to {file_path}: {e}")
+            # Clean up temp file if it exists
+            if temp_file.exists():
+                temp_file.unlink()
+            raise
 
     def _load_json(self, file_path: Path) -> list:
         """Load data from JSON file."""
