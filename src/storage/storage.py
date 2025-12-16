@@ -65,7 +65,26 @@ class Storage:
         else:
             monitors.append(monitor_dict)
 
+        # Save to file
         self._save_json(self.monitors_file, monitors)
+        
+        # Verify the save worked by reading back
+        try:
+            saved_monitors = self._load_json(self.monitors_file)
+            saved_ids = [m['id'] for m in saved_monitors]
+            if monitor.id not in saved_ids:
+                raise RuntimeError(f"Monitor {monitor.id} was not found after save")
+            
+            # Verify the saved data matches what we tried to save
+            saved_monitor = next((m for m in saved_monitors if m['id'] == monitor.id), None)
+            if saved_monitor != monitor_dict:
+                # Log warning but don't fail - might be minor differences
+                import logging
+                logging.warning(f"Saved monitor data differs from expected for {monitor.id}")
+        except Exception as e:
+            import logging
+            logging.error(f"Failed to verify monitor save: {e}")
+            raise
 
     def get_monitors(self) -> List[Monitor]:
         """Get all monitors."""

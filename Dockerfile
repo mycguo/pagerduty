@@ -45,6 +45,10 @@ RUN playwright install-deps chromium
 # Copy application code
 COPY . .
 
+# Create data directory and ensure it's writable
+# This ensures runtime data persists (if using Render disk, mount it here)
+RUN mkdir -p /app/data && chmod 777 /app/data
+
 # Expose port (Render will set PORT env var)
 EXPOSE 8501
 

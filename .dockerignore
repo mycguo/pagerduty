@@ -22,7 +22,9 @@ ENV/
 # Screenshots (created at runtime, can be large)
 screenshots/
 
-# Test results (will be created at runtime, but keep monitors.json)
+# Data files - exclude from image so they're created fresh at runtime
+# This prevents Docker image from overwriting runtime changes
+data/monitors.json
 data/test_results.json
 
 # Documentation
