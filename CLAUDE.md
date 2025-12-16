@@ -214,6 +214,31 @@ Optional:
   - `init_data.sh`: Checks for persistent disk mounting and initializes data directory
   - `migrate_to_postgres.py`: One-time migration of default monitors to Postgres
 
+## Important: Database Expiration (90 Days)
+
+**Critical limitation**: Render's free PostgreSQL database expires after 90 days and is permanently deleted.
+
+### What Happens
+- Database is deleted with all monitor data
+- App falls back to file storage (not persistent on Render free tier)
+- You lose all custom monitors and test history
+
+### Solutions
+1. **Renew free database** every 90 days (manual process)
+2. **Upgrade to paid database** ($7/month) - no expiration
+3. **Use external free database** (Supabase, Neon - no expiration)
+
+### Backup/Restore
+```bash
+# Backup monitors before expiration
+python scripts/backup_monitors.py
+
+# Restore after creating new database
+python scripts/backup_monitors.py --restore backups/monitors_backup_latest.json
+```
+
+**See `DATABASE_EXPIRATION.md` for complete details and recovery procedures.**
+
 ## Debugging Tips
 
 ### Enable Console Logging on Render
