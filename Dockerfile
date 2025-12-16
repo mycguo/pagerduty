@@ -55,10 +55,11 @@ RUN mkdir -p /app/data && chmod 777 /app/data
 # Make scripts executable
 RUN chmod +x /app/scripts/init_data.sh
 RUN chmod +x /app/scripts/migrate_to_postgres.py
+RUN chmod +x /app/scripts/migrate_schema.py
 
 # Expose port (Render will set PORT env var)
 EXPOSE 8501
 
-# Start command - run init script, migrate to Postgres if DATABASE_URL exists, then start Streamlit
-CMD ["sh", "-c", "/app/scripts/init_data.sh && ([ -n \"$DATABASE_URL\" ] && python3 /app/scripts/migrate_to_postgres.py || echo 'No DATABASE_URL, skipping Postgres migration') && streamlit run app.py --server.port=${PORT:-8501} --server.address=0.0.0.0"]
+# Start command - run init script, migrate schema, migrate data, then start Streamlit
+CMD ["sh", "-c", "/app/scripts/init_data.sh && ([ -n \"$DATABASE_URL\" ] && python3 /app/scripts/migrate_schema.py && python3 /app/scripts/migrate_to_postgres.py || echo 'No DATABASE_URL, skipping Postgres migration') && streamlit run app.py --server.port=${PORT:-8501} --server.address=0.0.0.0"]
 

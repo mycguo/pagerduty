@@ -71,8 +71,7 @@ class PostgresStorage:
                         duration_ms INTEGER,
                         error_message TEXT,
                         screenshot_path TEXT,
-                        steps_completed INTEGER DEFAULT 0,
-                        total_steps INTEGER DEFAULT 0
+                        step_results JSONB DEFAULT '[]'::jsonb
                     )
                 """)
 
@@ -157,9 +156,8 @@ class PostgresStorage:
                 cur.execute("""
                     INSERT INTO test_runs (
                         id, monitor_id, status, started_at, completed_at,
-                        duration_ms, error_message, screenshot_path,
-                        steps_completed, total_steps
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        duration_ms, error_message, screenshot_path, step_results
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """, (
                     test_run.id,
                     test_run.monitor_id,
@@ -169,8 +167,7 @@ class PostgresStorage:
                     test_run.duration_ms,
                     test_run.error_message,
                     test_run.screenshot_path,
-                    test_run.steps_completed,
-                    test_run.total_steps
+                    json.dumps(test_run.step_results)
                 ))
                 conn.commit()
 
@@ -227,6 +224,5 @@ class PostgresStorage:
             duration_ms=row['duration_ms'],
             error_message=row['error_message'],
             screenshot_path=row['screenshot_path'],
-            steps_completed=row['steps_completed'],
-            total_steps=row['total_steps']
+            step_results=row['step_results'] if isinstance(row['step_results'], list) else json.loads(row['step_results']) if row.get('step_results') else []
         )
