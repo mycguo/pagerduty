@@ -45,13 +45,23 @@ RUN playwright install-deps chromium
 # Copy application code
 COPY . .
 
+# Preserve default monitors for initialization on first run
+# The persistent disk will mount at /app/data, so we keep defaults elsewhere
+RUN mkdir -p /app/default_data && \
+    if [ -f /app/data/monitors.json ]; then \
+        cp /app/data/monitors.json /app/default_data/monitors.json; \
+    fi
+
 # Create data directory and ensure it's writable
 # This ensures runtime data persists (if using Render disk, mount it here)
 RUN mkdir -p /app/data && chmod 777 /app/data
 
+# Make initialization script executable
+RUN chmod +x /app/scripts/init_data.sh
+
 # Expose port (Render will set PORT env var)
 EXPOSE 8501
 
-# Start command - use PORT env var from Render
-CMD ["sh", "-c", "streamlit run app.py --server.port=${PORT:-8501} --server.address=0.0.0.0"]
+# Start command - initialize data then start Streamlit
+CMD ["sh", "-c", "/app/scripts/init_data.sh && streamlit run app.py --server.port=${PORT:-8501} --server.address=0.0.0.0"]
 

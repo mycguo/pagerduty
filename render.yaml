@@ -6,6 +6,11 @@ services:
     envVars:
       - key: PORT
         value: 8501
+    # Persistent disk for monitors and test results
+    disk:
+      name: monitoring-data
+      mountPath: /app/data
+      sizeGB: 1
     # NOTE: Do NOT add secrets here! Add them in Render Dashboard instead:
     # 1. Go to your service → Environment tab
     # 2. Click "Add Environment Variable"
