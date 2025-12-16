@@ -1,10 +1,3 @@
-databases:
-  - name: monitoring-db
-    databaseName: monitoring
-    user: monitoring_user
-    plan: free
-    # Free tier: 1GB storage, 256MB RAM, expires after 90 days
-
 services:
   - type: web
     name: web-monitoring-dashboard
@@ -17,21 +10,17 @@ services:
         value: /app/data
       - key: RENDER
         value: "true"
-      - key: DATABASE_URL
-        fromDatabase:
-          name: monitoring-db
-          property: connectionString
-    # NOTE: Persistent disk only works on paid plans
-    # Free tier uses PostgreSQL database for persistence instead
-    # disk:
-    #   name: monitoring-data
-    #   mountPath: /app/data
-    #   sizeGB: 1
-    # NOTE: Do NOT add secrets here! Add them in Render Dashboard instead:
+    # NOTE: Add these environment variables in Render Dashboard:
+    # REQUIRED:
+    #   - DATABASE_URL: Your Neon/external PostgreSQL connection string
+    #                   (Using external DB avoids Render's 90-day free tier expiration)
+    # OPTIONAL:
+    #   - SLACK_WEBHOOK_URL: For Slack alerts
+    #   - SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, SMTP_FROM_EMAIL: For email alerts
+    #
+    # To add environment variables:
     # 1. Go to your service → Environment tab
     # 2. Click "Add Environment Variable"
-    # 3. Add secrets like:
-    #    - SLACK_WEBHOOK_URL
-    #    - SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, SMTP_FROM_EMAIL
-    #    - Any other sensitive credentials
+    # 3. Add the variable name and value
+    # 4. Click "Save Changes" (triggers automatic redeploy)
 
