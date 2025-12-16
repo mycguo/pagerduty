@@ -31,8 +31,16 @@ class Storage:
 
     def _save_json(self, file_path: Path, data: list):
         """Save data to JSON file."""
-        with open(file_path, 'w') as f:
+        # Use atomic write: write to temp file first, then rename
+        # This ensures data integrity and prevents partial writes
+        temp_file = file_path.with_suffix('.tmp')
+        with open(temp_file, 'w') as f:
             json.dump(data, f, indent=2)
+            f.flush()
+            os.fsync(f.fileno())  # Force write to disk
+        
+        # Atomic rename (works on most filesystems)
+        temp_file.replace(file_path)
 
     def _load_json(self, file_path: Path) -> list:
         """Load data from JSON file."""

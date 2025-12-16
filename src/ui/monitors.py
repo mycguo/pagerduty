@@ -76,8 +76,15 @@ def render_monitor_list(storage: Storage):
                 # Run button
                 if st.button(f"▶️ Run", key=f"run_{monitor.id}", use_container_width=True):
                     with st.spinner(f"Running {monitor.name}..."):
+                        # Reload monitor from storage to get latest changes
+                        current_monitor = storage.get_monitor(monitor.id)
+                        if not current_monitor:
+                            st.error(f"Monitor {monitor.name} not found")
+                            st.rerun()
+                            return
+                        
                         runner = MonitorRunner(headless=True)
-                        result = runner.run_monitor(monitor)
+                        result = runner.run_monitor(current_monitor)
                         storage.save_test_run(result)
 
                         if result.status == 'success':
