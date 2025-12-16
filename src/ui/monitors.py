@@ -158,7 +158,6 @@ def render_monitor_editor(storage: Storage):
     default_enabled = True
     default_alerts_enabled = True
     default_emails = ""
-    default_slack = ""
 
     # Override defaults if editing
     if selected_monitor:
@@ -169,7 +168,6 @@ def render_monitor_editor(storage: Storage):
         default_enabled = selected_monitor.enabled
         default_alerts_enabled = selected_monitor.alerts_enabled
         default_emails = "\n".join(selected_monitor.alert_emails)
-        default_slack = selected_monitor.slack_webhook_url or ""
 
     # Basic information
     monitor_name = st.text_input("Monitor Name", value=default_name, placeholder="Production Login Check", key=f"monitor_name_{key_suffix}")
@@ -253,57 +251,31 @@ def render_monitor_editor(storage: Storage):
         )
 
         st.markdown("**Slack Alerts**")
-        
+
         # Check if configured in environment or secrets
-        secret_webhook = os.getenv("SLACK_WEBHOOK_URL")  # Railway/Docker
-        if not secret_webhook:
+        webhook_url = os.getenv("SLACK_WEBHOOK_URL")
+        if not webhook_url:
             try:
-                secret_webhook = st.secrets.get("slack_webhook_url")  # Local development
+                webhook_url = st.secrets.get("slack_webhook_url")
             except (FileNotFoundError, KeyError):
                 pass
 
-        if secret_webhook:
-            st.info("✅ Using Slack Webhook from secrets configuration.")
-            slack_webhook = secret_webhook # Use secret for testing/saving logic locally if needed, 
-                                           # or better: don't save it to the object if it matches secret.
-                                           # For simplicity, we can leave the field empty in UI and logic handles it?
-                                           # But we need to be able to test it.
-            
-            # If we want to allow overriding, we could show the input still. 
-            # But request was to remove from JSON. So we should NOT save it if it's the secret.
-            
-            use_override = st.checkbox("Override secret webhook")
-            if use_override:
-                 slack_webhook_input = st.text_input(
-                    "Slack Webhook URL (Override)",
-                    value=default_slack if default_slack != secret_webhook else "",
-                    placeholder="https://hooks.slack.com/...",
-                    key=f"monitor_slack_{key_suffix}"
-                )
-                 slack_webhook = slack_webhook_input
-            else:
-                 slack_webhook = None # Don't save it to the monitor object
-                 
-        else:
-            slack_webhook = st.text_input(
-                "Slack Webhook URL",
-                value=default_slack,
-                placeholder="https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
-                help="Enter your Slack webhook URL to send notifications to a Slack channel",
-                key=f"monitor_slack_{key_suffix}"
-            )
+        if webhook_url:
+            st.info("✅ Slack webhook configured via environment variables")
+            st.caption("Slack alerts will be sent to the configured channel when monitors fail.")
 
-        # Test button logic
-        test_url = slack_webhook or secret_webhook
-        if test_url:
+            # Test button
             from src.alerts.slack_alert import SlackAlert
             if st.button("🧪 Test Slack Webhook", key=f"test_slack_{key_suffix}"):
                 slack_alert = SlackAlert()
-                # If we have a local override/input, test that. Otherwise test the secret.
-                if slack_alert.send_test_message(test_url):
+                if slack_alert.send_test_message(webhook_url):
                     st.success("✅ Test message sent to Slack!")
                 else:
-                    st.error("❌ Failed to send test message. Check your webhook URL.")
+                    st.error("❌ Failed to send test message. Check your webhook URL in environment variables.")
+        else:
+            st.warning("⚠️ Slack webhook not configured")
+            st.caption("Add `SLACK_WEBHOOK_URL` environment variable to enable Slack alerts.")
+            st.code("SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/WEBHOOK/URL", language="bash")
 
     # Save button
     if st.button("💾 Save Monitor", type="primary", key=f"save_monitor_{key_suffix}"):
@@ -327,6 +299,7 @@ def render_monitor_editor(storage: Storage):
                 created_at = selected_monitor.created_at
 
             # Create monitor (updates if ID exists)
+            # Note: slack_webhook_url is always None - webhook is configured via environment variables
             monitor = Monitor(
                 name=monitor_name,
                 url=monitor_url,
@@ -334,7 +307,7 @@ def render_monitor_editor(storage: Storage):
                 enabled=enabled,
                 schedule=schedule,
                 alert_emails=alert_emails,
-                slack_webhook_url=slack_webhook if slack_webhook else None,
+                slack_webhook_url=None,  # Always None - use SLACK_WEBHOOK_URL environment variable
                 alerts_enabled=alerts_enabled,
                 created_at=created_at,
                 updated_at=datetime.now()

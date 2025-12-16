@@ -143,7 +143,9 @@ For this monitoring app, you'll likely use **less than 10MB** even with thousand
 1. ✅ Configure DATABASE_URL in Render (see Step 1 above)
 2. ✅ Wait for deployment to complete
 3. ✅ Verify monitors are loading
-4. Optional: Set up Slack/Email alerts (see `ALERTS_SETUP.md`)
+4. Optional: Set up Slack/Email alerts
+   - Add `SLACK_WEBHOOK_URL` environment variable in Render Dashboard
+   - For email alerts, add SMTP environment variables (see `.env.example`)
 5. Optional: Schedule regular backups
 
 ## Questions?

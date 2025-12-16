@@ -8,16 +8,17 @@ from src.alerts.base import AlertHandler
 
 
 class SlackAlert(AlertHandler):
-    """Sends alerts to Slack using webhooks."""
+    """Sends alerts to Slack using webhooks configured via environment variables."""
 
-    def __init__(self, webhook_url: str = None):
+    def __init__(self):
         """
         Initialize Slack alert handler.
 
-        Args:
-            webhook_url: Slack webhook URL (default: from monitor config or secrets)
+        Webhook URL is loaded from environment variables:
+        - SLACK_WEBHOOK_URL (preferred for production/Docker)
+        - Or from Streamlit secrets (for local development)
         """
-        self.webhook_url = webhook_url
+        pass
 
     def send_alert(self, monitor_name: str, test_run: Dict[str, Any]) -> bool:
         """
@@ -30,22 +31,18 @@ class SlackAlert(AlertHandler):
         Returns:
             True if alert was sent successfully, False otherwise
         """
-        # Priority: 1. Constructor arg 2. Run/Monitor config 3. Environment variable 4. Streamlit secrets
-        webhook_url = self.webhook_url or test_run.get('slack_webhook_url')
-        
+        # Get webhook URL from environment variables only
+        webhook_url = os.getenv("SLACK_WEBHOOK_URL")
+
         if not webhook_url:
-            # Try environment variable (for Railway, Docker, etc.)
-            webhook_url = os.getenv("SLACK_WEBHOOK_URL")
-        
-        if not webhook_url:
-            # Try Streamlit secrets (for local development)
+            # Try Streamlit secrets as fallback (for local development)
             try:
                 webhook_url = st.secrets.get("slack_webhook_url")
             except (FileNotFoundError, KeyError):
-                pass # Secrets file might not exist or key missing
+                pass
 
         if not webhook_url:
-            # Silent fail if just not configured
+            # Not configured - silent fail
             return False
 
         try:

@@ -118,11 +118,17 @@ Monitors support environment variable substitution in step values using `${VARIA
 
 ## Critical Implementation Details
 
-### Slack Webhook Security
+### Slack Webhook Configuration
 
-When saving monitors, check if the user is using the secret webhook URL from environment/Streamlit secrets. If so, do NOT save it to `monitor.slack_webhook_url` (keep it `None`). The alert system checks for the secret webhook at runtime. This prevents webhooks from being committed to `monitors.json` or stored in the database.
+Slack webhooks are **always loaded from environment variables** (`SLACK_WEBHOOK_URL`) and are **never stored in monitor configurations**. The `monitor.slack_webhook_url` field is always `None`.
 
-See `src/ui/monitors.py` lines 258-286 for the webhook override logic.
+This design:
+- Prevents webhook URLs from being committed to version control
+- Avoids storing sensitive URLs in the database
+- Simplifies configuration (one webhook for all monitors)
+- Enhances security
+
+See `src/alerts/slack_alert.py` for webhook loading logic and `src/ui/monitors.py` for the UI that displays webhook configuration status.
 
 ### Postgres Migration on First Deployment
 
