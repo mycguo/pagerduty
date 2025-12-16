@@ -56,13 +56,21 @@ class Storage:
         logger.info(f"Monitors file: {self.monitors_file.absolute()}")
         logger.info(f"Monitors file exists: {self.monitors_file.exists()}")
 
+        # Also print to console for Render logs
+        print(f"\n[Storage] Initialized with data directory: {self.data_dir.absolute()}")
+        print(f"[Storage] Monitors file: {self.monitors_file.absolute()}")
+        print(f"[Storage] Monitors file exists: {self.monitors_file.exists()}")
+
         # Initialize files if they don't exist
         if not self.monitors_file.exists():
             logger.info("monitors.json does not exist, creating empty file")
+            print(f"[Storage] monitors.json does not exist, creating empty file")
             self._save_json(self.monitors_file, [])
         else:
-            logger.info(f"monitors.json exists with {len(self._load_json(self.monitors_file))} monitors")
-            
+            monitor_count = len(self._load_json(self.monitors_file))
+            logger.info(f"monitors.json exists with {monitor_count} monitors")
+            print(f"[Storage] monitors.json exists with {monitor_count} monitors")
+
         if not self.results_file.exists():
             self._save_json(self.results_file, [])
 
@@ -90,10 +98,12 @@ class Storage:
             # Verify file was written
             if not file_path.exists():
                 raise RuntimeError(f"File {file_path} does not exist after save")
-            
+
             logger.info(f"Successfully saved {len(data)} items to {file_path}")
+            print(f"[Storage] Successfully saved {len(data)} items to {file_path.name}")
         except Exception as e:
             logger.error(f"Failed to save to {file_path}: {e}")
+            print(f"[Storage] ERROR: Failed to save to {file_path}: {e}")
             # Clean up temp file if it exists
             if temp_file.exists():
                 temp_file.unlink()

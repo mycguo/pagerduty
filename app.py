@@ -1,6 +1,9 @@
 """Main Streamlit application for web monitoring."""
 import streamlit as st
 from dotenv import load_dotenv
+import logging
+import os
+from pathlib import Path
 
 from src.storage.storage import Storage
 from src.monitoring.scheduler import MonitorScheduler
@@ -8,8 +11,59 @@ from src.ui.dashboard import render_dashboard
 from src.ui.monitors import render_monitors
 from src.ui.results import render_results
 
+# Configure logging to show in console
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
 # Load environment variables
 load_dotenv()
+
+# Print startup diagnostics
+print("\n" + "="*60)
+print("WEB MONITORING DASHBOARD - STARTUP DIAGNOSTICS")
+print("="*60)
+print(f"Working Directory: {os.getcwd()}")
+print(f"DATA_DIR env var: {os.getenv('DATA_DIR', 'Not set')}")
+print(f"RENDER env var: {os.getenv('RENDER', 'Not set')}")
+print(f"Running in Docker: {os.path.exists('/.dockerenv')}")
+
+# Check for default monitors in the image
+default_monitors_path = "/app/default_monitors.json"
+if os.path.exists(default_monitors_path):
+    file_size = os.path.getsize(default_monitors_path)
+    print(f"✓ Default monitors found: {default_monitors_path} ({file_size} bytes)")
+else:
+    print(f"✗ Default monitors NOT found at: {default_monitors_path}")
+    # Check alternate locations
+    alt_path = Path(os.getcwd()) / "default_monitors.json"
+    if alt_path.exists():
+        print(f"  Found at alternate location: {alt_path}")
+
+# Check data directory
+data_dir = os.getenv('DATA_DIR', '/app/data')
+print(f"\nData Directory: {data_dir}")
+if os.path.exists(data_dir):
+    print(f"✓ Data directory exists")
+    monitors_file = Path(data_dir) / "monitors.json"
+    if monitors_file.exists():
+        file_size = monitors_file.stat().st_size
+        print(f"✓ monitors.json exists ({file_size} bytes)")
+        try:
+            import json
+            with open(monitors_file) as f:
+                monitors_data = json.load(f)
+            print(f"✓ monitors.json contains {len(monitors_data)} monitors")
+        except Exception as e:
+            print(f"✗ Error reading monitors.json: {e}")
+    else:
+        print(f"✗ monitors.json NOT found at: {monitors_file}")
+else:
+    print(f"✗ Data directory does NOT exist: {data_dir}")
+
+print("="*60 + "\n")
 
 # Page configuration
 st.set_page_config(
@@ -23,9 +77,16 @@ st.set_page_config(
 @st.cache_resource
 def get_storage():
     """Get storage instance."""
-    return Storage()
+    logger.info("Initializing storage...")
+    storage = Storage()
+    monitors = storage.get_monitors()
+    logger.info(f"Storage initialized with {len(monitors)} monitors")
+    for monitor in monitors:
+        logger.info(f"  - {monitor.name} (enabled={monitor.enabled})")
+    return storage
 
 storage = get_storage()
+logger.info(f"Storage instance created. Monitor count: {len(storage.get_monitors())}")
 
 # Initialize Scheduler (ENABLED for Render - supports background processes)
 @st.cache_resource
