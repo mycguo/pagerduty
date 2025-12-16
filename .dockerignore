@@ -19,9 +19,11 @@ ENV/
 .git/
 .gitignore
 
-# Data (will be created at runtime)
-data/
+# Screenshots (created at runtime, can be large)
 screenshots/
+
+# Test results (will be created at runtime, but keep monitors.json)
+data/test_results.json
 
 # Documentation
 *.md
