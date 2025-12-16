@@ -76,13 +76,38 @@ st.set_page_config(
 # Initialize storage
 @st.cache_resource
 def get_storage():
-    """Get storage instance."""
+    """Get storage instance - uses Postgres if available, otherwise file storage."""
     logger.info("Initializing storage...")
-    storage = Storage()
+
+    # Check if DATABASE_URL is available (Postgres)
+    database_url = os.getenv("DATABASE_URL")
+
+    if database_url:
+        logger.info("DATABASE_URL found - using PostgreSQL storage")
+        print("\n[Storage] Using PostgreSQL for data persistence")
+        try:
+            from src.storage.postgres_storage import PostgresStorage
+            storage = PostgresStorage(database_url)
+            print(f"[Storage] PostgreSQL connection successful")
+        except Exception as e:
+            logger.error(f"Failed to initialize PostgreSQL storage: {e}")
+            print(f"[Storage] ERROR: Failed to connect to PostgreSQL: {e}")
+            print(f"[Storage] Falling back to file storage")
+            from src.storage.storage import Storage
+            storage = Storage()
+    else:
+        logger.info("No DATABASE_URL - using file-based storage")
+        print("\n[Storage] Using file-based storage (data will not persist on Render free tier)")
+        print("[Storage] To persist data, add a Postgres database in render.yaml")
+        from src.storage.storage import Storage
+        storage = Storage()
+
     monitors = storage.get_monitors()
     logger.info(f"Storage initialized with {len(monitors)} monitors")
+    print(f"[Storage] Loaded {len(monitors)} monitors")
     for monitor in monitors:
         logger.info(f"  - {monitor.name} (enabled={monitor.enabled})")
+        print(f"[Storage]   - {monitor.name} (enabled={monitor.enabled})")
     return storage
 
 storage = get_storage()

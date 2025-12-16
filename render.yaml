@@ -1,3 +1,10 @@
+databases:
+  - name: monitoring-db
+    databaseName: monitoring
+    user: monitoring_user
+    plan: free
+    # Free tier: 1GB storage, 256MB RAM, expires after 90 days
+
 services:
   - type: web
     name: web-monitoring-dashboard
@@ -10,11 +17,16 @@ services:
         value: /app/data
       - key: RENDER
         value: "true"
-    # Persistent disk for monitors and test results
-    disk:
-      name: monitoring-data
-      mountPath: /app/data
-      sizeGB: 1
+      - key: DATABASE_URL
+        fromDatabase:
+          name: monitoring-db
+          property: connectionString
+    # NOTE: Persistent disk only works on paid plans
+    # Free tier uses PostgreSQL database for persistence instead
+    # disk:
+    #   name: monitoring-data
+    #   mountPath: /app/data
+    #   sizeGB: 1
     # NOTE: Do NOT add secrets here! Add them in Render Dashboard instead:
     # 1. Go to your service → Environment tab
     # 2. Click "Add Environment Variable"
