@@ -1,0 +1,246 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+This is a **web application monitoring system** built with Streamlit that uses Playwright for browser automation. It allows users to create monitors that run automated test flows against web applications to verify functionality (e.g., login flows, form submissions, page navigation). The system supports scheduled execution, alerting, and result tracking.
+
+## Key Commands
+
+### Local Development
+
+```bash
+# Activate virtual environment
+source .venv/bin/activate
+
+# Run the Streamlit app
+streamlit run app.py
+
+# Install/reinstall Playwright browsers
+playwright install chromium
+
+# Run all monitors manually
+python run_all_monitors.py
+
+# Create sample monitors
+python create_sample_monitors.py
+```
+
+### Testing Individual Monitors
+
+```python
+# From Python REPL or script
+from src.storage.storage import Storage
+from src.monitoring.runner import MonitorRunner
+
+storage = Storage()
+monitor = storage.get_monitors()[0]  # Get first monitor
+
+runner = MonitorRunner(headless=False)  # headless=False to see browser
+result = runner.run_monitor(monitor)
+print(f"Status: {result.status}")
+```
+
+### Deployment (Render)
+
+The application is configured for deployment on Render.com. The deployment process:
+
+1. Push to main branch triggers automatic deployment
+2. `scripts/init_data.sh` runs to check for persistent storage
+3. If `DATABASE_URL` exists, `scripts/migrate_to_postgres.py` migrates default monitors to Postgres
+4. App starts and auto-detects storage backend (Postgres vs file-based)
+
+## Architecture
+
+### Storage Backend Strategy
+
+The application uses a **dual storage backend** pattern:
+
+- **PostgreSQL** (`src/storage/postgres_storage.py`): Used when `DATABASE_URL` environment variable is present (Render deployment)
+- **File-based** (`src/storage/storage.py`): Used for local development, stores data in `data/monitors.json` and `data/test_results.json`
+
+Both backends implement the same interface, so the application code is storage-agnostic. The selection happens in `app.py` at startup based on the presence of `DATABASE_URL`.
+
+**Important**: Render's free tier does NOT support persistent disks, so we use their free PostgreSQL database (90-day expiration) instead. The persistent disk configuration in `render.yaml` is commented out.
+
+### Monitor Execution Flow
+
+1. **Monitor Definition** (`src/monitoring/monitor.py`): Defines `Monitor` (configuration) and `TestRun` (execution result) models
+2. **Action Execution** (`src/automation/actions.py`): `ActionExecutor` interprets step definitions and executes them via Playwright
+3. **Browser Management** (`src/automation/browser.py`): `BrowserManager` handles Playwright lifecycle
+4. **Runner** (`src/monitoring/runner.py`): `MonitorRunner` orchestrates execution, screenshots on failure, and alert triggering
+5. **Scheduler** (`src/monitoring/scheduler.py`): `MonitorScheduler` uses APScheduler to run monitors on cron schedules
+
+### Step Type System
+
+Monitors are defined as JSON arrays of steps. Each step has a `type` field:
+
+- `navigate`: Navigate to a URL
+- `click`: Click an element (CSS selector or text selector like `text="Button"`)
+- `fill`: Fill a form field
+- `select`: Select dropdown option
+- `wait`: Wait for time or element state
+- `verify`: Assert conditions (url_contains, element_exists, text_contains, etc.)
+- `screenshot`: Capture screenshot
+- `execute_script`: Run arbitrary JavaScript
+
+Steps are executed sequentially by `ActionExecutor.execute()`. If any step fails, execution stops and a screenshot is captured.
+
+### Alert System
+
+Alerts (`src/alerts/`) use a base class pattern:
+
+- `base.py`: `AlertBase` abstract class
+- `email_alert.py`: SMTP email alerts (requires environment variables: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_FROM_EMAIL`)
+- `slack_alert.py`: Slack webhook alerts
+
+Alerts are triggered by `MonitorRunner._send_alerts()` only when:
+1. `monitor.alerts_enabled = True`
+2. Test status is `'failed'` or `'error'`
+3. `MonitorRunner.send_alerts = True` (constructor parameter)
+
+### Streamlit UI Structure
+
+The UI (`src/ui/`) is split across three pages:
+
+- `dashboard.py`: Overview charts, monitor status summary, recent runs
+- `monitors.py`: Monitor CRUD interface with JSON step editor, includes alert configuration UI
+- `results.py`: Test run history with filtering and screenshots
+
+Streamlit caching:
+- `@st.cache_resource` is used for storage and scheduler instances (singleton pattern)
+- Scheduler jobs are synced on every app rerun via `scheduler.sync_jobs()`
+
+### Environment Variable Substitution
+
+Monitors support environment variable substitution in step values using `${VARIABLE_NAME}` syntax. This is handled by `ActionExecutor` when executing steps, allowing secure storage of passwords/API keys in `.env` files.
+
+## Critical Implementation Details
+
+### Slack Webhook Security
+
+When saving monitors, check if the user is using the secret webhook URL from environment/Streamlit secrets. If so, do NOT save it to `monitor.slack_webhook_url` (keep it `None`). The alert system checks for the secret webhook at runtime. This prevents webhooks from being committed to `monitors.json` or stored in the database.
+
+See `src/ui/monitors.py` lines 258-286 for the webhook override logic.
+
+### Postgres Migration on First Deployment
+
+The migration script (`scripts/migrate_to_postgres.py`) checks if monitors already exist in the database before migrating from `default_monitors.json`. This prevents duplicate monitors on redeployments.
+
+The script is executed conditionally in the Dockerfile CMD based on whether `DATABASE_URL` is set.
+
+### Scheduler Job Synchronization
+
+The scheduler must synchronize jobs with monitor configuration on every Streamlit rerun. This is handled by:
+
+1. `scheduler.sync_jobs()` called in `app.py` after initializing the scheduler
+2. The method compares current jobs with monitors from storage
+3. Adds/removes/updates jobs based on monitor enabled state and schedule changes
+
+Jobs are keyed by monitor ID to track which jobs correspond to which monitors.
+
+### Screenshot Storage
+
+Screenshots are saved to `screenshots/{monitor_id}_{test_run_id}.png`. The directory is created automatically by `BrowserManager.take_screenshot()`. Screenshots are referenced in `TestRun.screenshot_path` and displayed in the UI.
+
+**Note**: Screenshots are excluded from Docker images via `.dockerignore` to keep image size down.
+
+## Common Development Patterns
+
+### Adding a New Step Type
+
+1. Add step execution logic to `ActionExecutor.execute()` in `src/automation/actions.py`
+2. Update the step type examples in `src/ui/monitors.py` (the example configuration expander)
+3. Document the new step type in `readme.md`
+
+### Adding a New Alert Channel
+
+1. Create a new alert class in `src/alerts/` inheriting from `AlertBase`
+2. Implement `send()` and `is_configured()` methods
+3. Initialize the alert instance in `MonitorRunner.__init__()`
+4. Add alert sending logic to `MonitorRunner._send_alerts()`
+5. Add UI configuration in `src/ui/monitors.py` alert expander
+
+### Storage Backend Modifications
+
+When modifying storage backends, ensure BOTH `Storage` and `PostgresStorage` implement the same interface:
+
+- `save_monitor(monitor: Monitor)`
+- `get_monitors() -> List[Monitor]`
+- `get_monitor(monitor_id: str) -> Optional[Monitor]`
+- `delete_monitor(monitor_id: str)`
+- `save_test_run(test_run: TestRun)`
+- `get_test_runs(monitor_id: Optional[str], limit: int) -> List[TestRun]`
+- `get_latest_test_run(monitor_id: str) -> Optional[TestRun]`
+
+## Environment Configuration
+
+### Local Development (.env)
+
+```bash
+# Test credentials (for monitor step substitution)
+TEST_USERNAME=user@example.com
+TEST_PASSWORD=secure_password
+
+# Email alerts (optional)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=your.email@gmail.com
+SMTP_PASSWORD=your_app_password
+SMTP_FROM_EMAIL=your.email@gmail.com
+
+# Slack alerts (optional)
+SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/WEBHOOK/URL
+```
+
+### Render Deployment
+
+Required environment variables in Render Dashboard:
+- `DATABASE_URL`: Auto-injected by Render when database is provisioned (see `render.yaml`)
+- `SLACK_WEBHOOK_URL`: Must be added manually in Render Dashboard
+- SMTP variables: Must be added manually if email alerts are needed
+
+Optional:
+- `DATA_DIR`: Defaults to `/app/data` in Docker, `./data` locally
+- `RENDER`: Set to `"true"` in `render.yaml` to help detect Render environment
+
+## File Organization Notes
+
+- `default_monitors.json`: Default monitors copied to persistent storage on first deployment
+- `data/`: Local file storage (gitignored, not persisted on Render free tier)
+- `screenshots/`: Screenshot storage (gitignored, excluded from Docker images)
+- `scripts/`: Deployment and migration scripts
+  - `init_data.sh`: Checks for persistent disk mounting and initializes data directory
+  - `migrate_to_postgres.py`: One-time migration of default monitors to Postgres
+
+## Debugging Tips
+
+### Enable Console Logging on Render
+
+The app includes comprehensive print statements prefixed with `[Storage]`, `[PostgresStorage]`, etc. These appear in Render's console logs since the free tier doesn't provide shell access.
+
+Look for these sections in deployment logs:
+1. Init script output showing disk mounting status
+2. Migration script output showing monitor migration
+3. Storage initialization showing which backend was selected
+4. Monitor loading confirmation
+
+### Test Monitors Locally with Browser Visible
+
+```python
+from src.monitoring.runner import MonitorRunner
+runner = MonitorRunner(headless=False)  # See browser window
+result = runner.run_monitor(monitor)
+```
+
+### Verify Storage Backend Selection
+
+Check app startup logs for:
+```
+[Storage] Using PostgreSQL for data persistence
+```
+or
+```
+[Storage] Using file-based storage (data will not persist on Render free tier)
+```
