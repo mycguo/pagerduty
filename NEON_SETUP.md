@@ -6,7 +6,7 @@ Your Neon database is now configured! Follow these steps to connect it to your R
 
 **Connection String:**
 ```
-postgresql://neondb_owner:npg_QsL4KFJj7EUq@ep-snowy-king-ahfkl6oz-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+#config as envionment 
 ```
 
 **Benefits:**
